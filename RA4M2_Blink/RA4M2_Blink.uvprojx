@@ -417,6 +417,11 @@
               <FileType>5</FileType>
               <FilePath>.\src\stage2_config.h</FilePath>
             </File>
+            <File>
+              <FileName>stage2_local_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\stage2_local_config.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

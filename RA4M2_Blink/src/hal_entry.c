@@ -788,11 +788,13 @@ static bool da16200_publish_replay_sample (replay_sample_t const * p_sample)
         return false;
     }
 
+    /* Use the publisher topic stored by AT+NWMQTP and omit the optional
+     * retain argument. DA16200 SDK v3.3.0.0 has a known retain-argument
+     * handling defect in AT+NWMQMSG. */
     length = snprintf(command,
                       sizeof(command),
-                      "AT+NWMQMSG='%s',%s,0\r\n",
-                      p_sample->p_payload,
-                      DA16200_MQTT_PUB_TOPIC);
+                      "AT+NWMQMSG='%s'\r\n",
+                      p_sample->p_payload);
     if ((length <= 0) || ((size_t) length >= sizeof(command)))
     {
         return false;
