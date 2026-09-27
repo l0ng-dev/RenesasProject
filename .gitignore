@@ -1,0 +1,10 @@
+# Keil build outputs
+/RA4M2_Blink/Objects/
+/RA4M2_Blink/Listings/
+/RA4M2_Blink/Target_1_build.log
+
+# RASC build timestamp/cache marker
+/RA4M2_Blink/output.rasc
+
+# Keil per-user UI state
+/RA4M2_Blink/*.uvguix.*
