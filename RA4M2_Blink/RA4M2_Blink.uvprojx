@@ -397,6 +397,26 @@
               <FileType>1</FileType>
               <FilePath>.\src\hal_warmstart.c</FilePath>
             </File>
+            <File>
+              <FileName>wifi_credentials.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\wifi_credentials.h</FilePath>
+            </File>
+            <File>
+              <FileName>replay_dataset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\replay_dataset.c</FilePath>
+            </File>
+            <File>
+              <FileName>replay_dataset.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\replay_dataset.h</FilePath>
+            </File>
+            <File>
+              <FileName>stage2_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\stage2_config.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

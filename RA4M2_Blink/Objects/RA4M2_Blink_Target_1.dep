@@ -1,6 +1,6 @@
 Dependencies for Project 'RA4M2_Blink', Target 'Target_1': (DO NOT MODIFY !)
 CompilerVersion: 6240000::V6.24::ARMCLANG
-F (.\src\hal_entry.c)(0x6AB64FAB)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char-gdwarf-4 -fno-function-sections @./via/rasc_armclang.via-I./RTE/_Target_1-I./ra/arm/CMSIS_6/CMSIS/Core/Include-I./ra/fsp/inc-I./ra/fsp/inc/api-I./ra/fsp/inc/instances-I./ra_cfg/fsp_cfg-I./ra_cfg/fsp_cfg/bsp-I./ra_gen-IE:/RenesasProject/RA4M2_Blink-D__UVISION_VERSION="543" -D_RTE_-o ./objects/hal_entry.o -MMD)
+F (.\src\hal_entry.c)(0x6AB8D26C)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char-gdwarf-4 -fno-function-sections @./via/rasc_armclang.via-I./RTE/_Target_1-I./ra/arm/CMSIS_6/CMSIS/Core/Include-I./ra/fsp/inc-I./ra/fsp/inc/api-I./ra/fsp/inc/instances-I./ra_cfg/fsp_cfg-I./ra_cfg/fsp_cfg/bsp-I./ra_gen-IE:/RenesasProject/RA4M2_Blink-D__UVISION_VERSION="543" -D_RTE_-o ./objects/hal_entry.o -MMD)
 I (ra_gen\hal_data.h)(0x6AB55F4C)
 I (ra\fsp\inc\api\bsp_api.h)(0x6A8DF7E2)
 I (ra\fsp\inc\api\fsp_common_api.h)(0x6A8DF7E2)
@@ -53,6 +53,9 @@ I (ra\fsp\inc\instances\r_sci_uart.h)(0x6A8DF7E4)
 I (ra\fsp\inc\api\r_uart_api.h)(0x6A8DF7E6)
 I (ra\fsp\inc\api\r_transfer_api.h)(0x6A8DF7E4)
 I (ra_cfg\fsp_cfg\r_sci_uart_cfg.h)(0x6AB55F4C)
+I (src\replay_dataset.h)(0x6AB8D14E)
+I (src\stage2_config.h)(0x6AB8D14E)
+I (src\wifi_credentials.h)(0x6AB7AB1A)
 F (.\src\hal_warmstart.c)(0x6A8DF854)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char-gdwarf-4 -fno-function-sections @./via/rasc_armclang.via-I./RTE/_Target_1-I./ra/arm/CMSIS_6/CMSIS/Core/Include-I./ra/fsp/inc-I./ra/fsp/inc/api-I./ra/fsp/inc/instances-I./ra_cfg/fsp_cfg-I./ra_cfg/fsp_cfg/bsp-I./ra_gen-IE:/RenesasProject/RA4M2_Blink-D__UVISION_VERSION="543" -D_RTE_-o ./objects/hal_warmstart.o -MMD)
 I (ra_gen\hal_data.h)(0x6AB55F4C)
 I (ra\fsp\inc\api\bsp_api.h)(0x6A8DF7E2)
@@ -106,7 +109,12 @@ I (ra\fsp\inc\instances\r_sci_uart.h)(0x6A8DF7E4)
 I (ra\fsp\inc\api\r_uart_api.h)(0x6A8DF7E6)
 I (ra\fsp\inc\api\r_transfer_api.h)(0x6A8DF7E4)
 I (ra_cfg\fsp_cfg\r_sci_uart_cfg.h)(0x6AB55F4C)
-F (E:/RenesasProject/RA4M2_Blink/ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/startup.c)(0x6A8DF836)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char-gdwarf-4 -fno-function-sections @./via/rasc_armclang.via-I./RTE/_Target_1-I./ra/arm/CMSIS_6/CMSIS/Core/Include-I./ra/fsp/inc-I./ra/fsp/inc/api-I./ra/fsp/inc/instances-I./ra_cfg/fsp_cfg-I./ra_cfg/fsp_cfg/bsp-I./ra_gen-IE:/RenesasProject/RA4M2_Blink-D__UVISION_VERSION="543" -D_RTE_-o ./objects/startup.o -MMD)
+F (.\src\wifi_credentials.h)(0x6AB7AB1A)()
+F (.\src\replay_dataset.c)(0x6AB8D14E)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char-gdwarf-4 -fno-function-sections @./via/rasc_armclang.via-I./RTE/_Target_1-I./ra/arm/CMSIS_6/CMSIS/Core/Include-I./ra/fsp/inc-I./ra/fsp/inc/api-I./ra/fsp/inc/instances-I./ra_cfg/fsp_cfg-I./ra_cfg/fsp_cfg/bsp-I./ra_gen-IE:/RenesasProject/RA4M2_Blink-D__UVISION_VERSION="543" -D_RTE_-o ./objects/replay_dataset.o -MMD)
+I (src\replay_dataset.h)(0x6AB8D14E)
+F (.\src\replay_dataset.h)(0x6AB8D14E)()
+F (.\src\stage2_config.h)(0x6AB8D14E)()
+F (E:/RenesasProject/RA4M2_Blink/ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/startup.c)(0x6AB7AC04)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char-gdwarf-4 -fno-function-sections @./via/rasc_armclang.via-I./RTE/_Target_1-I./ra/arm/CMSIS_6/CMSIS/Core/Include-I./ra/fsp/inc-I./ra/fsp/inc/api-I./ra/fsp/inc/instances-I./ra_cfg/fsp_cfg-I./ra_cfg/fsp_cfg/bsp-I./ra_gen-IE:/RenesasProject/RA4M2_Blink-D__UVISION_VERSION="543" -D_RTE_-o ./objects/startup.o -MMD)
 I (ra\fsp\inc\api\bsp_api.h)(0x6A8DF7E2)
 I (ra\fsp\inc\api\fsp_common_api.h)(0x6A8DF7E2)
 I (ra\fsp\inc\fsp_version.h)(0x6A8DF7E2)
@@ -1046,7 +1054,7 @@ I (ra\fsp\inc\instances\r_sci_uart.h)(0x6A8DF7E4)
 I (ra\fsp\inc\api\r_uart_api.h)(0x6A8DF7E6)
 I (ra\fsp\inc\api\r_transfer_api.h)(0x6A8DF7E4)
 I (ra_cfg\fsp_cfg\r_sci_uart_cfg.h)(0x6AB55F4C)
-F (E:/RenesasProject/RA4M2_Blink/ra_gen/pin_data.c)(0x6AB55F4C)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char-gdwarf-4 -fno-function-sections @./via/rasc_armclang.via-I./RTE/_Target_1-I./ra/arm/CMSIS_6/CMSIS/Core/Include-I./ra/fsp/inc-I./ra/fsp/inc/api-I./ra/fsp/inc/instances-I./ra_cfg/fsp_cfg-I./ra_cfg/fsp_cfg/bsp-I./ra_gen-IE:/RenesasProject/RA4M2_Blink-D__UVISION_VERSION="543" -D_RTE_-o ./objects/pin_data.o -MMD)
+F (E:/RenesasProject/RA4M2_Blink/ra_gen/pin_data.c)(0x6AB8C47C)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char-gdwarf-4 -fno-function-sections @./via/rasc_armclang.via-I./RTE/_Target_1-I./ra/arm/CMSIS_6/CMSIS/Core/Include-I./ra/fsp/inc-I./ra/fsp/inc/api-I./ra/fsp/inc/instances-I./ra_cfg/fsp_cfg-I./ra_cfg/fsp_cfg/bsp-I./ra_gen-IE:/RenesasProject/RA4M2_Blink-D__UVISION_VERSION="543" -D_RTE_-o ./objects/pin_data.o -MMD)
 I (ra\fsp\inc\api\bsp_api.h)(0x6A8DF7E2)
 I (ra\fsp\inc\api\fsp_common_api.h)(0x6A8DF7E2)
 I (ra\fsp\inc\fsp_version.h)(0x6A8DF7E2)

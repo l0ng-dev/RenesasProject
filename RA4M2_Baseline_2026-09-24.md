@@ -80,9 +80,51 @@ B83DE17E513B61B50CFC41D29CDBE79CCECCDC766B42193A28FD40A502C62175  E:\RenesasProj
 
 本补录仅将最小 `AT+VER` 往返标为已构建、已烧录（用户完成）、已调试并在当前接线下实机通过；不将三次启动扩大为长期稳定性，也不声称已完成配网、云端、传感器或机器人整机验证。
 
+## 2026-09-26 持续 AT、扫描与入网补录
+
+- 用户明确确认阶段 1 通过。当前用户代码已经实现 UART RX 环形缓冲区持续消费、按行解析、同步/异步响应区分和诊断计数；先前最小版本在成功后不再消费 RX 的限制已在源码层处理。
+- 用户提供的 Keil Watch 证据显示基础同步、版本和 STA 模式查询成功，国家码查询最终为 `+WFCC:CN`，DPM 查询为 `+DPM:0`。
+- AP 扫描曾成功返回，Watch 先后显示 4 个和 5 个 AP；目标热点至少一次被识别，`g_target_ap_found=1`。扫描数量仅代表当时无线环境。
+- 热点凭据保存在本机、被 `.git/info/exclude` 排除的 `RA4M2_Blink\src\wifi_credentials.h` 中；本文不保存真实密码。含凭据的 AXF/HEX 也不得公开上传。
+- 首次入网命令被接受：`g_join_command_result=1`；异步结果为 `g_join_result=2`、`g_join_line="+WFJAP:0,TIMEOUT"`，因此 Wi-Fi 入网尚未通过。
+- 后续重新启动时，Watch 显示 `g_at_attempt=0x22`、`g_at_sync_result=3`、`g_at_result=3`、`g_uart_error=1`，程序被暂停在重试延时函数中。该证据表明启动阶段反复发生 AT 响应超时，不是处理器异常。
+- 已实现启动恢复：AT 同步超时时发送 `AT+WFQAP`，尝试取消 DA16200 使用已保存 AP 配置发起的自动连接，再重新同步；新增 `g_startup_cancel_attempts` 供 Watch 观察。
+- 2026-09-26 Keil `Target_1` 构建成功，`0 Error(s), 0 Warning(s)`；Program Size 为 Code=6940、RO-data=760、RW-data=4、ZI-data=3500。最新版尚未烧录和实机验证。
+
+最新已构建产物 SHA-256：
+
+```text
+7C6B4CC0FB3977CDCA5845D796DF66BF526430429D463DE7C756A300978F92F3  E:\RenesasProject\RA4M2_Blink\src\hal_entry.c
+2CCE07919B5E4E062C9A1E88F504599E56BFCE6C08CE6E8A21B12C56DA40F627  E:\RenesasProject\RA4M2_Blink\configuration.xml
+AD6179A426874D48895637C7E2B0ADCFC4F7E14E192F17018EAE3B4E7BCF471D  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.axf
+D05222D5C04067980A439892BE2E77C06D876014F31F01359DF175DA256AEDAF  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.hex
+7CB7C4973DA5EA24D79D11FAE2D77694E820739967D06E4824D60D4404A271A7  E:\RenesasProject\RA4M2_Blink\Target_1_build.log
+```
+
+## 2026-09-27 DPM 自动硬件唤醒补录
+
+- DA16200 继续使用其自身保存的 Station Profile、Country Code `CN`、DHCP、SNTP 和 DPM 配置；用户确认模块可以自动连接热点、获得 IP、同步时间并进入 `Start DPM Power-Down !!!`。当前 RA4M2 固件不再主动扫描、入网或改写 DA16200 的 Wi-Fi、Country Code、Profile、`AT+DPM` 或 NVRAM配置。
+- 用户实测 DA16200 `J1-6` 为 `RTC_WAKE_UP`，DPM Power-Down 时约 3.3 V；短暂拉低后释放会输出 `Wakeup source is 0x81` 并唤醒，确认 HIGH 空闲、下降沿触发。
+- RA4M2_SENSOR 原理图与 RASC 资源核对确认 `P102` 引出到 `CN8-1` 且修改前空闲，不与 SCI0（P101 TX/P100 RX）、SWD/JTAG、P103 LED或按键冲突。`configuration.xml` 已把 P102 配置为普通 GPIO Output、初始 HIGH，RASC 对应生成 `BSP_IO_PORT_01_PIN_02` 输出高电平。
+- 用户在连接前测量确认 P102 HIGH，随后连接 `RA P102/CN8-1 → DA J1-6/RTC_WAKE_UP` 并保持公共 GND。源码产生 `HIGH → LOW 1 ms → HIGH` 脉冲，等待 `+INIT:WAKEUP,EXT` 后执行 `AT+MCUWUDONE → AT+CLRDPMSLPEXT → AT → AT+SETDPMSLPEXT`。
+- 最终 Keil Watch 证据为 `g_wakeup_pulse_count=1`、`g_wakeup_stage=6`、`g_wakeup_gpio_result=0`、`g_dpm_handshake_stage=5`、`g_mcuwudone_result=1`、`g_clear_dpm_sleep_result=1`、`g_at_sync_result=1`、`g_set_dpm_sleep_result=1`、`g_at_attempt=4`、`g_uart_error=0`，最后响应行为为 `OK`；接收无非法字节、丢弃或行溢出。恢复 DPM 后的 `g_last_uart_event=0x50` 为 Framing Error + Break Detect 组合事件，不否定此前握手成功。
+- 用户确认人工重复验证通过，并决定不执行 100 次自动循环。因此本阶段仅记录为“DPM自动硬件唤醒与最小UART会话实机通过”，不表述为压力测试、长期稳定性或完整功耗验收。
+- 最新 `Target_1` 由 Arm Compiler 6.24 构建成功，`0 Error(s), 0 Warning(s)`，Program Size 为 Code=6404、RO-data=688、RW-data=4、ZI-data=2744。Codex未执行烧录，实机烧录与Watch验证由用户完成。
+
+2026-09-27 当前产物 SHA-256：
+
+```text
+A8D2B12A3638F3956E567E837FD1C320DAE758F01571459E07F7D1858AFA5EC8  E:\RenesasProject\RA4M2_Blink\src\hal_entry.c
+3049B133CE36FAF19CDED0D691191E59063A45BD6AB8EF8BF0E4C0C3D93568FA  E:\RenesasProject\RA4M2_Blink\configuration.xml
+B0CA570188987DC54D8650359F151C32FC06715407969535E772D90F6BDA4431  E:\RenesasProject\RA4M2_Blink\ra_gen\pin_data.c
+4DA7801AEF89E4FCE66AEB3AAD939124E4D73F3CD9587CEDD64C689443C7C62E  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.axf
+52304E1CAC7020FF0FE5276E529B5867D40C1E470A4AA6BCB2555D38396196ED  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.hex
+8C14EFE4E387AD59DF10E1CA97C3DFA0CA4767CA03FB84E5DBDF1E901445C21E  E:\RenesasProject\RA4M2_Blink\Target_1_build.log
+```
+
 ## 下一步边界
 
-RA4M2 ↔ DA16200 的最小 `AT+VER` 联调已按上述边界完成。后续若要进入持续 AT 通信，先处理成功后 RX 环形缓冲区不再消费的问题；Wi-Fi 配网、TCP/MQTT、历史数据重放和传感器属于尚未开始的新阶段，需另行确定范围与验收条件。
+RA4M2 ↔ DA16200 的最小 UART、DA16200 自主管理的自动联网/DHCP/SNTP/DPM，以及 RA4M2 P102 自动唤醒与官方 DPM Host 握手已经取得用户实机证据。用户明确不执行 100 次循环测试。后续若继续开发，应保持 DA16200 负责持久 Wi-Fi 配置的边界，再单独定义 TCP/MQTT、巴法云或历史数据重放任务；传感器、断网恢复、功耗和长期稳定性仍需分别定义和验收。
 
 ## 证据文件
 

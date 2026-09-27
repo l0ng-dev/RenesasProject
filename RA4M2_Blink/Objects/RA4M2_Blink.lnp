@@ -1,6 +1,7 @@
 --cpu=Cortex-M33
 ".\objects\hal_entry.o"
 ".\objects\hal_warmstart.o"
+".\objects\replay_dataset.o"
 ".\objects\startup.o"
 ".\objects\system.o"
 ".\objects\bsp_clocks.o"

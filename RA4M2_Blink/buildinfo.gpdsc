@@ -13,6 +13,10 @@
         <file category="include" name="src/"/>
         <file category="source" name="src/hal_entry.c"/>
         <file category="source" name="src/hal_warmstart.c"/>
+        <file category="source" name="src/replay_dataset.c"/>
+        <file category="header" name="src/replay_dataset.h" path=""/>
+        <file category="header" name="src/stage2_config.h" path=""/>
+        <file category="header" name="src/wifi_credentials.h" path=""/>
       </project_files>
     </generator>
   </generators>
