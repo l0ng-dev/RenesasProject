@@ -8,3 +8,6 @@
 
 # Keil per-user UI state
 /RA4M2_Blink/*.uvguix.*
+
+# Local Wi-Fi credentials (contains sensitive values)
+/RA4M2_Blink/src/config/wifi_credentials.h

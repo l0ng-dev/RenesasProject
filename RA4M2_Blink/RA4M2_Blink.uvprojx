@@ -469,16 +469,6 @@
               <FileType>5</FileType>
               <FilePath>.\src\modules\potentiometer\potentiometer.h</FilePath>
             </File>
-            <File>
-              <FileName>communication_test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\test\communication_test.c</FilePath>
-            </File>
-            <File>
-              <FileName>sensor_test.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\test\sensor_test.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

@@ -85,7 +85,7 @@ B83DE17E513B61B50CFC41D29CDBE79CCECCDC766B42193A28FD40A502C62175  E:\RenesasProj
 - 用户明确确认阶段 1 通过。当前用户代码已经实现 UART RX 环形缓冲区持续消费、按行解析、同步/异步响应区分和诊断计数；先前最小版本在成功后不再消费 RX 的限制已在源码层处理。
 - 用户提供的 Keil Watch 证据显示基础同步、版本和 STA 模式查询成功，国家码查询最终为 `+WFCC:CN`，DPM 查询为 `+DPM:0`。
 - AP 扫描曾成功返回，Watch 先后显示 4 个和 5 个 AP；目标热点至少一次被识别，`g_target_ap_found=1`。扫描数量仅代表当时无线环境。
-- 热点凭据保存在本机、被 `.git/info/exclude` 排除的 `RA4M2_Blink\src\wifi_credentials.h` 中；本文不保存真实密码。含凭据的 AXF/HEX 也不得公开上传。
+- 热点凭据当前保存在本机 `RA4M2_Blink\src\config\wifi_credentials.h`，并由仓库根目录 `.gitignore` 排除；本文不保存真实密码。含凭据的 AXF/HEX 也不得公开上传。
 - 首次入网命令被接受：`g_join_command_result=1`；异步结果为 `g_join_result=2`、`g_join_line="+WFJAP:0,TIMEOUT"`，因此 Wi-Fi 入网尚未通过。
 - 后续重新启动时，Watch 显示 `g_at_attempt=0x22`、`g_at_sync_result=3`、`g_at_result=3`、`g_uart_error=1`，程序被暂停在重试延时函数中。该证据表明启动阶段反复发生 AT 响应超时，不是处理器异常。
 - 已实现启动恢复：AT 同步超时时发送 `AT+WFQAP`，尝试取消 DA16200 使用已保存 AP 配置发起的自动连接，再重新同步；新增 `g_startup_cancel_attempts` 供 Watch 观察。
@@ -181,9 +181,31 @@ E9056F733F250D4CA94DBC308330F5A5B04F3E3AA8FD38BC1EF729E16166A8E8  E:\RenesasProj
 50ACC3C660080456026493FB5B6AFB5237C14963C4288AD0E9FF960B6EB23FBD  E:\RenesasProject\RA4M2_Blink\Target_1_build.log
 ```
 
+## 2026-09-29 DHT11 实时采集、引脚迁移与工程精简补录
+
+- 实物为带小板的三针 DHT11 模块，接口丝印从左到右为 GND/DATA/VCC；用户已确认供电和连线：GND→RA GND、VCC→RA 3.3 V、DATA→P015（CN8-5）。模块 DATA 与 VCC 之间实测约 9.x kΩ，可判定小板已带约 10 kΩ 上拉，因此未增加外部上拉，也未启用 RA 内部 Pull-up。
+- 初始选用的 P104 受板载 USER LED D6 与 R4 4.7 kΩ 负载影响，不适合作为 DHT11 单总线数据脚。P104 的 DHT11 配置已解除，最终在 RASC 中将 P015 配置为符号名 `DHT11_DATA`、GPIO Input、Pull-up=None、IRQ=None、Drive Capacity=Low、CMOS；生成代码对应 `BSP_IO_PORT_00_PIN_15`。
+- `src\modules\dht11\dht11.c/.h` 已实现单总线读取：主机起始低电平 20 ms、释放 13 µs、读取 40 bit、校验和验证、有限超时及 Watch 诊断。应用层采样周期为 2500 ms，并在 OLED 显示温湿度；未接入联网发送。
+- 用户调试截图显示 `g_dht11_status=0x02`、`g_dht11_read_count=2`、超时和校验错误计数均为0，随后明确确认10分钟稳定性测试通过。该结果适用于当时已烧录固件；不能代替本轮代码精简后新产物的重新烧录回归。
+- 工程精简删除了主循环中的重复电位器采样、无引用测试钩子及其Keil工程项，并简化OLED显示缓存状态；保留DA16200诊断、DHT11诊断、OLED通用显示函数和即将使用的MPU6050占位模块。共享I²C总线层延后到正式接入MPU6050时处理，DA16200阻塞式连接流程暂不调整。
+- 仓库根目录 `.gitignore` 已明确忽略 `/RA4M2_Blink/src/config/wifi_credentials.h`，热点敏感信息仍仅保存在本地，不纳入版本控制或交接文档。
+- 2026-09-29 `Target_1` 使用 ArmClang 6.24 构建成功，目标器件 `R7FA4M2AD`，结果 `0 Error(s), 0 Warning(s)`；Program Size为Code=13684、RO-data=2632、RW-data=4、ZI-data=3164，生成AXF和HEX。本轮状态为“已实现、已构建”，尚未重新烧录或完成精简后的实机回归。
+
+本轮当前产物 SHA-256：
+
+```text
+9FD7DBDC151A617786D76513A9BCDF63BC0DB2B129D39EB605C556D165E87AD1  E:\RenesasProject\RA4M2_Blink\src\app\app_main.c
+186E6E071E3BA730A9391AF04F67ED463FB06002F9F1E9758343F729E92F9B38  E:\RenesasProject\RA4M2_Blink\src\modules\dht11\dht11.c
+6989141CC5CDE50850E81095957EA295423B9F7131D81D22AEE0ED255915DB32  E:\RenesasProject\RA4M2_Blink\src\modules\dht11\dht11.h
+B976235BBD6A89306F6C41E424B7D0E1F8347436AE998923564892D94C00672D  E:\RenesasProject\RA4M2_Blink\configuration.xml
+9B1A1E198642A89E14152288F2D2CB375BAD0CD61D523AAE84D53A9828029FA6  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.axf
+0C999B464B8EA47FDE609ED576A40770AF782955D241F1497FDE72942428BB1E  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.hex
+5F3091830B626E0230BB7BC58563451A5932B4CD5CC5FB75F58AB1B8D6338172  E:\RenesasProject\RA4M2_Blink\Target_1_build.log
+```
+
 ## 下一步边界
 
-RA4M2 ↔ DA16200 的 UART、上电等待、自动联网状态识别、P102/DPM Host 握手和一次热点断开恢复已取得用户实机证据。当前固件不再包含巴法云、MQTT或历史数据重放。下一步应先烧录并复验本次精简版，再推进实时传感器接入、弱信号/反复掉线、功耗和长期稳定性验证；用户明确不执行100次循环测试。
+RA4M2 ↔ DA16200 的 UART、上电等待、自动联网状态识别、P102/DPM Host 握手和一次热点断开恢复已取得用户实机证据；DHT11读取、OLED显示及10分钟稳定性也已由用户确认通过。当前固件不包含巴法云、MQTT或历史数据重放。下一步先烧录并回归验证2026-09-29精简产物，再正式确认MPU6050模块、供电、地址脚、上拉和接线，并据此建立与OLED共用P301/P302的I²C访问层。弱信号、反复掉线、功耗和更长时间稳定性仍待单独验收；用户明确不执行100次循环测试。
 
 ## 证据文件
 

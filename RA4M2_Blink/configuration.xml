@@ -324,6 +324,7 @@
     </config>
   </raModuleConfiguration>
   <raPinConfiguration>
+    <symbolicName propertyId="p015.symbolic_name" value="DHT11_DATA"/>
     <pincfg active="true" name="R7FA4M2AD3CFL.pincfg" selected="true" symbol="g_bsp_pin_cfg">
       <configSetting altId="adc0.an11.p013" configurationId="adc0.an11"/>
       <configSetting altId="debug0.mode.jtag" configurationId="debug0.mode"/>
@@ -333,6 +334,8 @@
       <configSetting altId="debug0.tms.p108" configurationId="debug0.tms"/>
       <configSetting altId="p013.adc0.an11" configurationId="p013"/>
       <configSetting altId="p013.gpio_mode.gpio_mode_an" configurationId="p013.gpio_mode"/>
+      <configSetting altId="p015.input" configurationId="p015"/>
+      <configSetting altId="p015.gpio_mode.gpio_mode_in" configurationId="p015.gpio_mode"/>
       <configSetting altId="p100.sci0.rxd" configurationId="p100"/>
       <configSetting altId="p100.gpio_mode.gpio_mode_peripheral" configurationId="p100.gpio_mode"/>
       <configSetting altId="p101.sci0.txd" configurationId="p101"/>

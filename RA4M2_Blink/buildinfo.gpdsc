@@ -28,8 +28,6 @@
         <file category="header" name="src/modules/oled/oled_font.h" path=""/>
         <file category="source" name="src/modules/potentiometer/potentiometer.c"/>
         <file category="header" name="src/modules/potentiometer/potentiometer.h" path=""/>
-        <file category="source" name="src/test/communication_test.c"/>
-        <file category="source" name="src/test/sensor_test.c"/>
       </project_files>
     </generator>
   </generators>

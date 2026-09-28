@@ -6,6 +6,7 @@
 /* Common macro for FSP header files. There is also a corresponding FSP_FOOTER macro at the end of this file. */
 FSP_HEADER
 
+#define DHT11_DATA (BSP_IO_PORT_00_PIN_15)
 
 extern const ioport_cfg_t g_bsp_pin_cfg; /* R7FA4M2AD3CFL.pincfg */
 

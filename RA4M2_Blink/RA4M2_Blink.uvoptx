@@ -235,12 +235,62 @@
           <WinNumber>1</WinNumber>
           <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_rx_received</ItemText>
         </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_status</ItemText>
+        </Ww>
+        <Ww>
+          <count>17</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_last_fsp_error</ItemText>
+        </Ww>
+        <Ww>
+          <count>18</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_read_count</ItemText>
+        </Ww>
+        <Ww>
+          <count>19</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_timeout_count</ItemText>
+        </Ww>
+        <Ww>
+          <count>20</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_checksum_error_count</ItemText>
+        </Ww>
+        <Ww>
+          <count>21</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_raw_data</ItemText>
+        </Ww>
+        <Ww>
+          <count>22</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_stage</ItemText>
+        </Ww>
+        <Ww>
+          <count>23</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_last_level</ItemText>
+        </Ww>
+        <Ww>
+          <count>24</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_idle_level</ItemText>
+        </Ww>
+        <Ww>
+          <count>25</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_release_level</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>0</SubType>
-          <ItemText>0x20000484</ItemText>
+          <ItemText>0x40080850</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -503,30 +553,6 @@
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\modules\potentiometer\potentiometer.h</PathWithFileName>
       <FilenameWithoutPath>potentiometer.h</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>1</GroupNumber>
-      <FileNumber>18</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\src\test\communication_test.c</PathWithFileName>
-      <FilenameWithoutPath>communication_test.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>1</GroupNumber>
-      <FileNumber>19</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\src\test\sensor_test.c</PathWithFileName>
-      <FilenameWithoutPath>sensor_test.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

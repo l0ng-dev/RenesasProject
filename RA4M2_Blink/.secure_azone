@@ -4,6 +4,7 @@
     <partition>
         <peripheral name="PORT0.CM33" group="PORT">
             <slot name="P013.CM33" secure="true"/>
+            <slot name="P015.CM33" secure="true"/>
         </peripheral>
         <peripheral name="PORT1.CM33" group="PORT">
             <slot name="P100.CM33" secure="true"/>

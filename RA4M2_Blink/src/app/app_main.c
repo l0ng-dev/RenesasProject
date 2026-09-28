@@ -2,19 +2,65 @@
 
 #include "app_config.h"
 #include "da16200.h"
+#include "dht11.h"
 #include "oled.h"
 #include "potentiometer.h"
 #include "hal_data.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 
-/* OLED application result: 0 not initialized, 1 display updated,
- * 2 initialization failed, 3 display update failed. */
-volatile uint8_t  g_oled_display_result;
-volatile uint16_t g_oled_last_display_raw;
-volatile uint16_t g_oled_last_display_percent_x10;
+static bool     g_pot_display_cache_valid;
+static uint16_t g_oled_last_display_raw;
+static uint16_t g_oled_last_display_percent_x10;
 static uint32_t g_sensor_refresh_elapsed_ms;
+static uint32_t g_dht11_refresh_elapsed_ms;
 static uint32_t g_wifi_check_elapsed_ms;
+
+static void app_display_dht11 (void)
+{
+    char temperature_line[17];
+    char humidity_line[17];
+    fsp_err_t err;
+
+    if (OLED_STATUS_READY != g_oled_status)
+    {
+        return;
+    }
+
+    if (DHT11_STATUS_READ_OK == g_dht11_status)
+    {
+        (void) snprintf(temperature_line,
+                        sizeof(temperature_line),
+                        "TEMP:%2u.%1uC     ",
+                        (unsigned int) g_dht11_temperature_integer,
+                        (unsigned int) g_dht11_temperature_decimal);
+        (void) snprintf(humidity_line,
+                        sizeof(humidity_line),
+                        "HUMI:%2u.%1u%%    ",
+                        (unsigned int) g_dht11_humidity_integer,
+                        (unsigned int) g_dht11_humidity_decimal);
+    }
+    else if (DHT11_STATUS_READY == g_dht11_status)
+    {
+        (void) snprintf(temperature_line, sizeof(temperature_line), "DHT11 WAIT      ");
+        (void) snprintf(humidity_line, sizeof(humidity_line), "NO SAMPLE       ");
+    }
+    else
+    {
+        (void) snprintf(temperature_line,
+                        sizeof(temperature_line),
+                        "DHT11 ERR:%u     ",
+                        (unsigned int) g_dht11_status);
+        (void) snprintf(humidity_line, sizeof(humidity_line), "CHECK WATCH     ");
+    }
+
+    err = OLED_ShowString(1U, 1U, temperature_line);
+    if (FSP_SUCCESS == err)
+    {
+        err = OLED_ShowString(2U, 1U, humidity_line);
+    }
+}
 
 static void app_display_potentiometer (void)
 {
@@ -27,7 +73,7 @@ static void app_display_potentiometer (void)
         return;
     }
 
-    if ((1U == g_oled_display_result) &&
+    if (g_pot_display_cache_valid &&
         (g_oled_last_display_raw == g_pot_raw) &&
         (g_oled_last_display_percent_x10 == g_pot_percent_x10))
     {
@@ -41,21 +87,21 @@ static void app_display_potentiometer (void)
                     (unsigned int) (g_pot_percent_x10 / 10U),
                     (unsigned int) (g_pot_percent_x10 % 10U));
 
-    err = OLED_ShowString(2U, 1U, adc_line);
+    err = OLED_ShowString(3U, 1U, adc_line);
     if (FSP_SUCCESS == err)
     {
-        err = OLED_ShowString(3U, 1U, percent_line);
+        err = OLED_ShowString(4U, 1U, percent_line);
     }
 
     if (FSP_SUCCESS == err)
     {
         g_oled_last_display_raw = g_pot_raw;
         g_oled_last_display_percent_x10 = g_pot_percent_x10;
-        g_oled_display_result = 1U;
+        g_pot_display_cache_valid = true;
     }
     else
     {
-        g_oled_display_result = 3U;
+        g_pot_display_cache_valid = false;
     }
 }
 
@@ -65,12 +111,19 @@ static void app_service_delay (uint32_t delay_ms)
     {
         DA16200_ServiceDelay(1U);
         g_sensor_refresh_elapsed_ms++;
+        g_dht11_refresh_elapsed_ms++;
         g_wifi_check_elapsed_ms++;
         if (g_sensor_refresh_elapsed_ms >= APP_SENSOR_REFRESH_INTERVAL_MS)
         {
             g_sensor_refresh_elapsed_ms = 0U;
             Potentiometer_Sample();
             app_display_potentiometer();
+        }
+        if (g_dht11_refresh_elapsed_ms >= APP_DHT11_REFRESH_INTERVAL_MS)
+        {
+            g_dht11_refresh_elapsed_ms = 0U;
+            (void) DHT11_Read();
+            app_display_dht11();
         }
     }
 }
@@ -79,36 +132,33 @@ static void app_oled_init (void)
 {
     fsp_err_t err;
 
-    g_oled_display_result = 0U;
+    g_pot_display_cache_valid = false;
     g_oled_last_display_raw = 0U;
     g_oled_last_display_percent_x10 = 0U;
     g_sensor_refresh_elapsed_ms = 0U;
+    g_dht11_refresh_elapsed_ms = 0U;
     g_wifi_check_elapsed_ms = 0U;
 
     err = OLED_Init();
     if (FSP_SUCCESS == err)
     {
-        err = OLED_ShowString(1U, 1U, "RA4M2 SENSOR");
+        err = OLED_ShowString(1U, 1U, "DHT11 WAIT");
     }
     if (FSP_SUCCESS == err)
     {
-        err = OLED_ShowString(2U, 1U, "ADC:");
+        err = OLED_ShowString(2U, 1U, "NO SAMPLE");
     }
     if (FSP_SUCCESS == err)
     {
-        err = OLED_ShowString(3U, 1U, "PCT:");
+        err = OLED_ShowString(3U, 1U, "ADC:");
     }
     if (FSP_SUCCESS == err)
     {
-        err = OLED_ShowString(4U, 1U, "I2C OLED OK");
+        err = OLED_ShowString(4U, 1U, "PCT:");
     }
     if (FSP_SUCCESS == err)
     {
         app_display_potentiometer();
-    }
-    else
-    {
-        g_oled_display_result = 2U;
     }
 }
 
@@ -118,18 +168,18 @@ void App_Main (void)
 
     Potentiometer_Init();
     Potentiometer_Sample();
+    (void) DHT11_Init();
     app_oled_init();
 
     communication_ready = DA16200_Connect();
+    (void) DHT11_Read();
+    app_display_dht11();
 
     while (1)
     {
         uint32_t blink_interval_ms = communication_ready ?
                                      APP_STATUS_LED_OK_INTERVAL_MS :
                                      APP_STATUS_LED_ERROR_INTERVAL_MS;
-
-        Potentiometer_Sample();
-        app_display_potentiometer();
 
         (void) R_IOPORT_PinWrite(&g_ioport_ctrl,
                                  BSP_IO_PORT_01_PIN_03,

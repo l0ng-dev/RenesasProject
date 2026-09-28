@@ -117,7 +117,7 @@ FSP Configuration
       P002 46 - - - - Disabled - - "ADC0: AN002; ICU0: IRQ08" - None - - 
       P013 40 ADC0_AN011 - - - "Analog mode" - None "ADC0: AN011; ANALOG0: VREFL" - IO - - 
       P014 39 - - - - Disabled - - "ADC0: AN012; DAC0: DA0" - None - - 
-      P015 38 - - - - Disabled - - "ADC0: AN013; DAC1: DA1; ICU0: IRQ13" - None - - 
+      P015 38 GPIO DHT11_DATA - None "Input mode" - None "ADC0: AN013; DAC1: DA1; ICU0: IRQ13" - IO - - 
       P100 36 SCI0_RXD0 - Low None "Peripheral mode" CMOS None "AGT0: AGTIO0; GPT_POEG0: GTETRGA; GPT5: GTIOC5B; ICU0: IRQ02; QSPI0: QSPCLK; SCI0: RXD0; SCI0: SCL0; SCI1: SCK1" - IO - - 
       P101 35 SCI0_TXD0 - Low None "Peripheral mode" CMOS None "AGT0: AGTEE0; GPT_POEG1: GTETRGB; GPT5: GTIOC5A; ICU0: IRQ01; QSPI0: QIO1; SCI0: SDA0; SCI0: TXD0; SCI1: CTSRTS1" - IO - - 
       P102 34 GPIO - Low - "Output mode (Initial High)" CMOS - "ADC0: ADTRG0; AGT0: AGTO0; CAN0: CRX0; GPT_OPS0: GTOWLO; GPT2: GTIOC2B; QSPI0: QIO0; SCI0: SCK0" - IO - - 
