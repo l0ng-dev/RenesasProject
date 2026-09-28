@@ -340,7 +340,7 @@
               <MiscControls>@./via/rasc_armclang.via</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>.\src\app;.\src\config;.\src\modules\potentiometer;.\src\modules\oled;.\src\modules\da16200;.\src\modules\dht11;.\src\modules\mpu6050</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -382,9 +382,6 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Source Group 1</GroupName>
-        </Group>
-        <Group>
           <GroupName>:Renesas RA Smart Configurator:Common Sources</GroupName>
           <Files>
             <File>
@@ -398,29 +395,89 @@
               <FilePath>.\src\hal_warmstart.c</FilePath>
             </File>
             <File>
+              <FileName>app_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\app\app_main.c</FilePath>
+            </File>
+            <File>
+              <FileName>app_main.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\app\app_main.h</FilePath>
+            </File>
+            <File>
+              <FileName>app_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\config\app_config.h</FilePath>
+            </File>
+            <File>
               <FileName>wifi_credentials.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\src\wifi_credentials.h</FilePath>
+              <FilePath>.\src\config\wifi_credentials.h</FilePath>
             </File>
             <File>
-              <FileName>replay_dataset.c</FileName>
+              <FileName>da16200.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\replay_dataset.c</FilePath>
+              <FilePath>.\src\modules\da16200\da16200.c</FilePath>
             </File>
             <File>
-              <FileName>replay_dataset.h</FileName>
+              <FileName>da16200.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\src\replay_dataset.h</FilePath>
+              <FilePath>.\src\modules\da16200\da16200.h</FilePath>
             </File>
             <File>
-              <FileName>stage2_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\stage2_config.h</FilePath>
+              <FileName>dht11.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\modules\dht11\dht11.c</FilePath>
             </File>
             <File>
-              <FileName>stage2_local_config.h</FileName>
+              <FileName>dht11.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\src\stage2_local_config.h</FilePath>
+              <FilePath>.\src\modules\dht11\dht11.h</FilePath>
+            </File>
+            <File>
+              <FileName>mpu6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\modules\mpu6050\mpu6050.c</FilePath>
+            </File>
+            <File>
+              <FileName>mpu6050.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\modules\mpu6050\mpu6050.h</FilePath>
+            </File>
+            <File>
+              <FileName>oled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\modules\oled\oled.c</FilePath>
+            </File>
+            <File>
+              <FileName>oled.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\modules\oled\oled.h</FilePath>
+            </File>
+            <File>
+              <FileName>oled_font.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\modules\oled\oled_font.h</FilePath>
+            </File>
+            <File>
+              <FileName>potentiometer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\modules\potentiometer\potentiometer.c</FilePath>
+            </File>
+            <File>
+              <FileName>potentiometer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\modules\potentiometer\potentiometer.h</FilePath>
+            </File>
+            <File>
+              <FileName>communication_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\test\communication_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>sensor_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\test\sensor_test.c</FilePath>
             </File>
           </Files>
         </Group>

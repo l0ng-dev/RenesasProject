@@ -122,9 +122,68 @@ B0CA570188987DC54D8650359F151C32FC06715407969535E772D90F6BDA4431  E:\RenesasProj
 8C14EFE4E387AD59DF10E1CA97C3DFA0CA4767CA03FB84E5DBDF1E901445C21E  E:\RenesasProject\RA4M2_Blink\Target_1_build.log
 ```
 
+## 2026-09-28 ADC 与 SSD1306 OLED 实机验证补录
+
+- RASC/FSP 6.6.0 已配置 `g_i2c_oled`，使用 SCI2 Channel 2 的 Simple I2C：P301/SCI2_SCL、P302/SCI2_SDA，7-bit地址 `0x3C`，Standard 100 kbit/s，回调优先级12，DTC关闭。
+- 用户确认RA4M2-SENSOR板卡R28/R29选路焊接正确，并完成OLED接线：GND→CN4-3、VCC→CN4-2（3V3）、SCL→CN4-4、SDA→CN4-5。
+- `src\OLED.c/.h/.Font.h`完成SSD1306驱动移植，采用FSP异步I2C回调、有限超时、Abort处理和批量字符发送。`hal_entry.c`将P013/ADC0 AN011电位器值显示到OLED，并在DA16200启动等待/重试期间每200 ms按变化刷新。
+- 用户Keil Watch截图显示OLED状态正常：`g_oled_status=1`、`g_oled_last_fsp_error=0`、Abort和Timeout均为0；ADC截图值为2741、66.9%。用户随后确认转动电位器时OLED无需复位即可实时更新。
+- 2026-09-28全量Rebuild：Arm Compiler 6.24，`0 Error(s), 0 Warning(s)`；Code=13040、RO-data=2948、RW-data=4、ZI-data=3352。用户完成烧录并实机确认，本次Codex未执行烧录。
+
+本次补录产物哈希：
+
+```text
+1C3B428B30B023231A7057C8824C32A9FAE6BFAAE6DC360D1D7D0646D9819DF4  E:\RenesasProject\RA4M2_Blink\src\hal_entry.c
+07784A80507B879BDE6F0F78F0FB7A29FC1837E56718EC241B40E92DAEEB9147  E:\RenesasProject\RA4M2_Blink\src\OLED.c
+F5A35D3243486ACCB9815E5649AB7AC5EE782AED348EBD52E2370FF960040BF4  E:\RenesasProject\RA4M2_Blink\src\OLED.h
+C3E56E043A461354E12E629070C4D10C9B1BF09645776B34B6C8321C7B790A2C  E:\RenesasProject\RA4M2_Blink\src\OLED_Font.h
+91FADF435E38D3E098B64F2392D3ABC11362FA7DF4241518A799DC743E3D32E0  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.axf
+7DD75A5B9E65B14199412D46B8EEFA0FA625472AAA2BF19A2FF894D220D60222  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.hex
+3329C01B607C5FA417DDECA76F20A8E6DB0CE80331011CF8CB972400B275A84E  E:\RenesasProject\RA4M2_Blink\Objects\codex_oled_refresh_rebuild.log
+```
+
+本项状态为：已实现、已构建、已烧录（用户完成）、已实机验证；尚未进行长期稳定性、100次循环、功耗或整机验收。
+
+## 2026-09-28 DA16200 自动联网状态识别修复补录
+
+- 用户现场确认 DA16200 上电后始终保持与手机热点连接；旧逻辑未先读取模块实际连接状态，而是直接执行 `AT+WFSCAN`。当扫描结果未匹配目标 SSID 时，RA4M2 将已联网模块误判为失败，表现为 `g_join_result=4`、`g_wifi_ready=0`，并在重试循环中反复触发 `RTC_WAKE_UP`，DA16200 串口随之重复输出 `rtc1 wakeup interrupt ...`。该现象不是热点掉线或凭据错误。
+- `src\modules\da16200\da16200.c` 已在扫描/入网前增加 `AT+WFSTA` 查询：`+WFSTA:1` 时直接置 `g_wifi_ready=1` 并跳过扫描和重复入网；`+WFSTA:0` 或查询未得到有效连接状态时才进入原扫描/连接路径。新增 Watch 变量 `g_wifi_status_result` 和 `g_wifi_status`，其中 `g_wifi_status=1` 表示已连接、`2` 表示未连接。
+- 2026-09-28 Keil `Target_1` 使用 ArmClang 构建成功，目标器件 `R7FA4M2AD`，结果 `0 Error(s), 0 Warning(s)`；Program Size 为 Code=13780、RO-data=3012、RW-data=4、ZI-data=3548。构建前 RASC 自动执行；构建前后内容哈希对比显示 `ra_gen`、`ra_cfg` 未产生新的内容变化，`via\rasc_armclang.via` 仅调整两个宏定义的顺序。
+- 用户使用包含新状态变量的固件进入 Debug 并 Run。最终 Watch 显示 `g_at_sync_result=1`、`g_wifi_status_result=1`、`g_wifi_status=1`、`g_wifi_ready=1`、`g_wakeup_stage=6`；同时 `g_scan_result=0`、`g_scan_ap_count=0`、`g_join_command_result=0`，证明模块已联网时正确跳过扫描和重复入网，而不是相关步骤失败。
+- 同一轮运行中，Watch 最后完整响应为 `g_last_rx_line="+NWMQMSGSND:1"`；DA16200 串口连续显示 Msg_ID 20、21、22 的 `Mqtt Pub Enq : SUCCESS`。这证明本轮三条 MQTT 消息均被模块成功接受进入发布队列；未提供对应三条云端页面记录，因此本轮新增证据不单独扩展为三条消息均已在云端持久留存。
+
+本项状态为：已实现、已构建、已由用户运行并通过 Keil Watch/DA16200 串口验证。Wi-Fi 自动连接状态识别和本轮 MQTT 连续入队通过；断网恢复、热点重启、弱信号、消息持久化、100次循环、长期稳定性和功耗仍未验收。
+
+本次补录产物 SHA-256：
+
+```text
+6AEFB0E028D27C5104EE985E18F68951C2A5D8CBD6D97A120EE13283BCC2B621  E:\RenesasProject\RA4M2_Blink\src\modules\da16200\da16200.c
+122DC6CD7A9140CD48773A98DD0FB58DC6E74A9B7488F1F77CFECCFE115C6078  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.axf
+812FB85CF83ADB613CF4C0954CF0B0A58D2966F02B7C5D73D44C60D5F4EA44E3  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.hex
+BD2677988E445362C71A61FED5F9F3ED8F3768A77DF2B12404788BCEAB61638D  E:\RenesasProject\RA4M2_Blink\Target_1_build.log
+```
+
+## 2026-09-28 DA16200 上电启动、重连与代码精简补录
+
+- 用户确认此前每次重新上电后 DA16200 会停在 `[BOOT]`，必须通过调试控制台输入 `boot` 才继续启动；同时存在 VOFA 串口侧影响和 RA4M2 首次唤醒/AT 发送早于 DA16200 完成启动的问题。当前固件在 SCI0 首次打开后保持 TX 空闲 5 s，再执行 `RTC_WAKE_UP` 和 AT 流程；该上电自动启动/联网问题已由用户确认解决。
+- Wi-Fi 失败不再在 `DA16200_Connect()` 内无限重试。连接尝试会返回应用主循环：未连接时每 2 s 触发下一次尝试，已连接时每 30 s 复查。用户确认热点断开后能够重新连接；该结果是一次现场功能确认，不等于弱信号、反复掉线或长期稳定性验收。
+- 用户明确不再使用巴法云。当前工程已删除 `cloud_config.h`、`cloud_local_config.h`、历史数据回放、MQTT 配置/发布逻辑及其 Keil 工程引用；`wifi_credentials.h` 继续保留并只承担热点凭据配置。
+- `da16200.c` 删除未启用的版本、国家码、DPM只读查询分支及对应废弃状态变量，保留 UART 环形缓冲、AT超时、DPM握手、Wi-Fi状态、扫描/加入和必要 Watch 诊断。当前文件为 849 行。
+- 精简后的 `Target_1` 使用 ArmClang 6.24 构建成功，目标器件 `R7FA4M2AD`，结果 `0 Error(s), 0 Warning(s)`；Program Size 为 Code=12200、RO-data=2624、RW-data=4、ZI-data=3124。生成 AXF 和 HEX。本次精简版状态为“已实现、已构建”，尚未由用户重新烧录和实机复验。
+
+本次精简版 SHA-256：
+
+```text
+1F6A9C337222B769E17BA6BE1B1461794C8C5EA141AE9EB93988E68173436A07  E:\RenesasProject\RA4M2_Blink\src\modules\da16200\da16200.c
+E9314B9AACCD8753EAACB5F53528D3404CCD209A6626C9ACB4C90910264062AA  E:\RenesasProject\RA4M2_Blink\src\config\app_config.h
+C64C06A69DAE063B0799E0A750779191A2F5F4FE590639331545866DD0F7CB53  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.axf
+E9056F733F250D4CA94DBC308330F5A5B04F3E3AA8FD38BC1EF729E16166A8E8  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.hex
+50ACC3C660080456026493FB5B6AFB5237C14963C4288AD0E9FF960B6EB23FBD  E:\RenesasProject\RA4M2_Blink\Target_1_build.log
+```
+
 ## 下一步边界
 
-RA4M2 ↔ DA16200 的最小 UART、DA16200 自主管理的自动联网/DHCP/SNTP/DPM，以及 RA4M2 P102 自动唤醒与官方 DPM Host 握手已经取得用户实机证据。用户明确不执行 100 次循环测试。后续若继续开发，应保持 DA16200 负责持久 Wi-Fi 配置的边界，再单独定义 TCP/MQTT、巴法云或历史数据重放任务；传感器、断网恢复、功耗和长期稳定性仍需分别定义和验收。
+RA4M2 ↔ DA16200 的 UART、上电等待、自动联网状态识别、P102/DPM Host 握手和一次热点断开恢复已取得用户实机证据。当前固件不再包含巴法云、MQTT或历史数据重放。下一步应先烧录并复验本次精简版，再推进实时传感器接入、弱信号/反复掉线、功耗和长期稳定性验证；用户明确不执行100次循环测试。
 
 ## 证据文件
 

@@ -1,0 +1,23 @@
+#ifndef APP_CONFIG_H
+#define APP_CONFIG_H
+
+#define APP_SENSOR_REFRESH_INTERVAL_MS       (200U)
+#define APP_STATUS_LED_OK_INTERVAL_MS        (500U)
+#define APP_STATUS_LED_ERROR_INTERVAL_MS     (100U)
+
+#define POTENTIOMETER_ADC_MAX_CODE           (4095U)
+#define POTENTIOMETER_ADC_POLL_LIMIT         (1000U)
+
+#define DA16200_RX_BUFFER_SIZE               (256U)
+#define DA16200_LINE_SIZE                    (192U)
+#define DA16200_RESPONSE_TIMEOUT_MS          (1500U)
+#define DA16200_SCAN_TIMEOUT_MS              (15000U)
+#define DA16200_JOIN_TIMEOUT_MS              (45000U)
+#define DA16200_RETRY_INTERVAL_MS            (2000U)
+#define DA16200_STATUS_CHECK_INTERVAL_MS     (30000U)
+#define DA16200_POWER_ON_DELAY_MS             (5000U)
+#define DA16200_WAKE_PULSE_MS                (1U)
+#define DA16200_WAKE_RX_MAX_WAIT_MS          (1500U)
+#define DA16200_WAKE_INDICATION_SUFFIX       "WAKEUP,EXT"
+
+#endif

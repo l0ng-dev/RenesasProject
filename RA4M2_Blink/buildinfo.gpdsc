@@ -11,13 +11,25 @@
     <generator id="Renesas RA Smart Configurator">
       <project_files>
         <file category="include" name="src/"/>
+        <file category="source" name="src/app/app_main.c"/>
+        <file category="header" name="src/app/app_main.h" path=""/>
+        <file category="header" name="src/config/app_config.h" path=""/>
+        <file category="header" name="src/config/wifi_credentials.h" path=""/>
         <file category="source" name="src/hal_entry.c"/>
         <file category="source" name="src/hal_warmstart.c"/>
-        <file category="source" name="src/replay_dataset.c"/>
-        <file category="header" name="src/replay_dataset.h" path=""/>
-        <file category="header" name="src/stage2_config.h" path=""/>
-        <file category="header" name="src/stage2_local_config.h" path=""/>
-        <file category="header" name="src/wifi_credentials.h" path=""/>
+        <file category="source" name="src/modules/da16200/da16200.c"/>
+        <file category="header" name="src/modules/da16200/da16200.h" path=""/>
+        <file category="source" name="src/modules/dht11/dht11.c"/>
+        <file category="header" name="src/modules/dht11/dht11.h" path=""/>
+        <file category="source" name="src/modules/mpu6050/mpu6050.c"/>
+        <file category="header" name="src/modules/mpu6050/mpu6050.h" path=""/>
+        <file category="source" name="src/modules/oled/oled.c"/>
+        <file category="header" name="src/modules/oled/oled.h" path=""/>
+        <file category="header" name="src/modules/oled/oled_font.h" path=""/>
+        <file category="source" name="src/modules/potentiometer/potentiometer.c"/>
+        <file category="header" name="src/modules/potentiometer/potentiometer.h" path=""/>
+        <file category="source" name="src/test/communication_test.c"/>
+        <file category="source" name="src/test/sensor_test.c"/>
       </project_files>
     </generator>
   </generators>
@@ -72,12 +84,17 @@
         <file category="other" name="ra/arm/CMSIS_6/LICENSE"/>
         <file category="header" name="ra/fsp/inc/api/bsp_api.h" path=""/>
         <file category="header" name="ra/fsp/inc/api/fsp_common_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_adc_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_elc_api.h" path=""/>
+        <file category="header" name="ra/fsp/inc/api/r_i2c_master_api.h" path=""/>
         <file category="header" name="ra/fsp/inc/api/r_ioport_api.h" path=""/>
         <file category="header" name="ra/fsp/inc/api/r_transfer_api.h" path=""/>
         <file category="header" name="ra/fsp/inc/api/r_uart_api.h" path=""/>
         <file category="header" name="ra/fsp/inc/fsp_features.h" path=""/>
         <file category="header" name="ra/fsp/inc/fsp_version.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_adc.h" path=""/>
         <file category="header" name="ra/fsp/inc/instances/r_ioport.h" path=""/>
+        <file category="header" name="ra/fsp/inc/instances/r_sci_i2c.h" path=""/>
         <file category="header" name="ra/fsp/inc/instances/r_sci_uart.h" path=""/>
         <file category="header" name="ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7FA4M2AD.h" path=""/>
         <file category="header" name="ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/renesas.h" path=""/>
@@ -122,7 +139,9 @@
         <file category="source" name="ra/fsp/src/bsp/mcu/ra4m2/bsp_linker.c"/>
         <file category="header" name="ra/fsp/src/bsp/mcu/ra4m2/bsp_mcu_info.h" path=""/>
         <file category="header" name="ra/fsp/src/bsp/mcu/ra4m2/bsp_peripheral.h" path=""/>
+        <file category="source" name="ra/fsp/src/r_adc/r_adc.c"/>
         <file category="source" name="ra/fsp/src/r_ioport/r_ioport.c"/>
+        <file category="source" name="ra/fsp/src/r_sci_i2c/r_sci_i2c.c"/>
         <file category="source" name="ra/fsp/src/r_sci_uart/r_sci_uart.c"/>
       </files>
     </component>
@@ -137,7 +156,9 @@
         <file category="header" name="ra_cfg/fsp_cfg/bsp/bsp_mcu_family_cfg.h" path=""/>
         <file category="header" name="ra_cfg/fsp_cfg/bsp/bsp_mcu_ofs_cfg.h" path=""/>
         <file category="header" name="ra_cfg/fsp_cfg/bsp/bsp_pin_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_adc_cfg.h" path=""/>
         <file category="header" name="ra_cfg/fsp_cfg/r_ioport_cfg.h" path=""/>
+        <file category="header" name="ra_cfg/fsp_cfg/r_sci_i2c_cfg.h" path=""/>
         <file category="header" name="ra_cfg/fsp_cfg/r_sci_uart_cfg.h" path=""/>
       </files>
     </component>

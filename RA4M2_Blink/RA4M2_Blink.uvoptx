@@ -158,82 +158,82 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_stage2_result</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_wifi_ready</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_mqtt_client_state</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_wifi_status</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_replay_publish_attempts</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_uart_error</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_replay_publish_successes</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_wakeup_stage</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_replay_publish_failures</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_dpm_handshake_stage</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_dpm_handshake_stage</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_at_sync_result</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_mqtt_client_line</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_wifi_status_result</ItemText>
         </Ww>
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_mqtt_publish_line</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_scan_result</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_mqtt_publish_result</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_scan_ap_count</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_mqtt_publish_event_count</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_target_ap_found</ItemText>
         </Ww>
         <Ww>
           <count>10</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_stage2_sample_index</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_join_command_result</ItemText>
         </Ww>
         <Ww>
           <count>11</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_at_result</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_join_result</ItemText>
         </Ww>
         <Ww>
           <count>12</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_rx_dropped</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_at_result</ItemText>
         </Ww>
         <Ww>
           <count>13</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_rx_line_overflows</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_last_uart_event</ItemText>
         </Ww>
         <Ww>
           <count>14</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_rx_invalid_bytes</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_last_rx_line</ItemText>
         </Ww>
         <Ww>
           <count>15</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/hal_entry.c\g_mqtt_publish_event_count</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_rx_received</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -297,21 +297,13 @@
   </Target>
 
   <Group>
-    <GroupName>Source Group 1</GroupName>
-    <tvExp>0</tvExp>
-    <tvExpOptDlg>0</tvExpOptDlg>
-    <cbSel>0</cbSel>
-    <RteFlg>0</RteFlg>
-  </Group>
-
-  <Group>
     <GroupName>:Renesas RA Smart Configurator:Common Sources</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>2</GroupNumber>
+      <GroupNumber>1</GroupNumber>
       <FileNumber>1</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -323,7 +315,7 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>2</GroupNumber>
+      <GroupNumber>1</GroupNumber>
       <FileNumber>2</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
@@ -335,62 +327,206 @@
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>2</GroupNumber>
+      <GroupNumber>1</GroupNumber>
       <FileNumber>3</FileNumber>
-      <FileType>5</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\src\wifi_credentials.h</PathWithFileName>
-      <FilenameWithoutPath>wifi_credentials.h</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>4</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\src\replay_dataset.c</PathWithFileName>
-      <FilenameWithoutPath>replay_dataset.c</FilenameWithoutPath>
+      <PathWithFileName>.\src\app\app_main.c</PathWithFileName>
+      <FilenameWithoutPath>app_main.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>2</GroupNumber>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>4</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\app\app_main.h</PathWithFileName>
+      <FilenameWithoutPath>app_main.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
       <FileNumber>5</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\src\replay_dataset.h</PathWithFileName>
-      <FilenameWithoutPath>replay_dataset.h</FilenameWithoutPath>
+      <PathWithFileName>.\src\config\app_config.h</PathWithFileName>
+      <FilenameWithoutPath>app_config.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>2</GroupNumber>
+      <GroupNumber>1</GroupNumber>
       <FileNumber>6</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\src\stage2_config.h</PathWithFileName>
-      <FilenameWithoutPath>stage2_config.h</FilenameWithoutPath>
+      <PathWithFileName>.\src\config\wifi_credentials.h</PathWithFileName>
+      <FilenameWithoutPath>wifi_credentials.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>2</GroupNumber>
+      <GroupNumber>1</GroupNumber>
       <FileNumber>7</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\da16200\da16200.c</PathWithFileName>
+      <FilenameWithoutPath>da16200.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>8</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\src\stage2_local_config.h</PathWithFileName>
-      <FilenameWithoutPath>stage2_local_config.h</FilenameWithoutPath>
+      <PathWithFileName>.\src\modules\da16200\da16200.h</PathWithFileName>
+      <FilenameWithoutPath>da16200.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>9</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\dht11\dht11.c</PathWithFileName>
+      <FilenameWithoutPath>dht11.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>10</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\dht11\dht11.h</PathWithFileName>
+      <FilenameWithoutPath>dht11.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>11</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\mpu6050\mpu6050.c</PathWithFileName>
+      <FilenameWithoutPath>mpu6050.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>12</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\mpu6050\mpu6050.h</PathWithFileName>
+      <FilenameWithoutPath>mpu6050.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>13</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\oled\oled.c</PathWithFileName>
+      <FilenameWithoutPath>oled.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>14</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\oled\oled.h</PathWithFileName>
+      <FilenameWithoutPath>oled.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>15</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\oled\oled_font.h</PathWithFileName>
+      <FilenameWithoutPath>oled_font.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>16</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\potentiometer\potentiometer.c</PathWithFileName>
+      <FilenameWithoutPath>potentiometer.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>17</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\potentiometer\potentiometer.h</PathWithFileName>
+      <FilenameWithoutPath>potentiometer.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>18</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\test\communication_test.c</PathWithFileName>
+      <FilenameWithoutPath>communication_test.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>19</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\test\sensor_test.c</PathWithFileName>
+      <FilenameWithoutPath>sensor_test.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

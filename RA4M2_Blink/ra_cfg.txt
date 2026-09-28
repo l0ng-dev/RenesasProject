@@ -115,12 +115,12 @@ FSP Configuration
       P000 48 - - - - Disabled - - "ADC0: AN000; ICU0: IRQ06" - None - - 
       P001 47 - - - - Disabled - - "ADC0: AN001; ICU0: IRQ07" - None - - 
       P002 46 - - - - Disabled - - "ADC0: AN002; ICU0: IRQ08" - None - - 
-      P013 40 - - - - Disabled - - "ADC0: AN011; ANALOG0: VREFL" - None - - 
+      P013 40 ADC0_AN011 - - - "Analog mode" - None "ADC0: AN011; ANALOG0: VREFL" - IO - - 
       P014 39 - - - - Disabled - - "ADC0: AN012; DAC0: DA0" - None - - 
       P015 38 - - - - Disabled - - "ADC0: AN013; DAC1: DA1; ICU0: IRQ13" - None - - 
       P100 36 SCI0_RXD0 - Low None "Peripheral mode" CMOS None "AGT0: AGTIO0; GPT_POEG0: GTETRGA; GPT5: GTIOC5B; ICU0: IRQ02; QSPI0: QSPCLK; SCI0: RXD0; SCI0: SCL0; SCI1: SCK1" - IO - - 
       P101 35 SCI0_TXD0 - Low None "Peripheral mode" CMOS None "AGT0: AGTEE0; GPT_POEG1: GTETRGB; GPT5: GTIOC5A; ICU0: IRQ01; QSPI0: QIO1; SCI0: SDA0; SCI0: TXD0; SCI1: CTSRTS1" - IO - - 
-      P102 34 - - - - Disabled - - "ADC0: ADTRG0; AGT0: AGTO0; CAN0: CRX0; GPT_OPS0: GTOWLO; GPT2: GTIOC2B; QSPI0: QIO0; SCI0: SCK0" - None - - 
+      P102 34 GPIO - Low - "Output mode (Initial High)" CMOS - "ADC0: ADTRG0; AGT0: AGTO0; CAN0: CRX0; GPT_OPS0: GTOWLO; GPT2: GTIOC2B; QSPI0: QIO0; SCI0: SCK0" - IO - - 
       P103 33 GPIO - Low - "Output mode (Initial Low)" CMOS - "AGT2: AGTIO2; CAN0: CTX0; GPT_OPS0: GTOWUP; GPT2: GTIOC2A; QSPI0: QIO3; SCI0: CTSRTS0" - IO - - 
       P104 32 - - - - Disabled - - "AGT2: AGTEE2; GPT_POEG1: GTETRGB; GPT1: GTIOC1B; ICU0: IRQ01; QSPI0: QIO2" - None - - 
       P108 25 DEBUG0_TMS - Low - "Peripheral mode" CMOS None "AGT3: AGTOA3; DEBUG0: SWDIO; DEBUG0: TMS; GPT_OPS0: GTOULO; GPT0: GTIOC0B; SCI9: CTSRTS9; SPI0: SSLA0" - IO - - 
@@ -135,8 +135,8 @@ FSP Configuration
       P212 8 - - - - Disabled - - "AGT1: AGTEE1; CGC0: EXTAL; GPT_POEG3: GTETRGD; GPT0: GTIOC0B; ICU0: IRQ03; SCI1: RXD1; SCI1: SCL1" - None - - 
       P213 7 - - - - Disabled - - "AGT2: AGTEE2; CGC0: XTAL; GPT_POEG2: GTETRGC; GPT0: GTIOC0A; ICU0: IRQ02; SCI1: SDA1; SCI1: TXD1" - None - - 
       P300 24 DEBUG0_TCK - Low - "Peripheral mode" CMOS None "DEBUG0: SWCLK; DEBUG0: TCK; GPT_OPS0: GTOUUP; GPT0: GTIOC0A; SPI0: SSLA1" - IO - - 
-      P301 23 - - - - Disabled - - "AGT0: AGTIO0; GPT_OPS0: GTOULO; GPT4: GTIOC4B; ICU0: IRQ06; SCI2: RXD2; SCI2: SCL2; SCI9: CTSRTS9; SPI0: SSLA2" - None - - 
-      P302 22 - - - - Disabled - - "GPT_OPS0: GTOUUP; GPT4: GTIOC4A; ICU0: IRQ05; SCI2: SDA2; SCI2: TXD2; SPI0: SSLA3" - None - - 
+      P301 23 SCI2_SCL2 - Low None "Peripheral mode" "n-ch open drain" None "AGT0: AGTIO0; GPT_OPS0: GTOULO; GPT4: GTIOC4B; ICU0: IRQ06; SCI2: RXD2; SCI2: SCL2; SCI9: CTSRTS9; SPI0: SSLA2" - IO - - 
+      P302 22 SCI2_SDA2 - Low None "Peripheral mode" "n-ch open drain" None "GPT_OPS0: GTOUUP; GPT4: GTIOC4A; ICU0: IRQ05; SCI2: SDA2; SCI2: TXD2; SPI0: SSLA3" - IO - - 
       P402 1 - - - - Disabled - - "AGT0: AGTIO0; AGT1: AGTIO1; AGT2: AGTIO2; AGT3: AGTIO3; CAC0: CACREF; CAN0: CRX0; ICU0: IRQ04; RTC0: RTCIC0; SCI4: CTS4; SSI_COMMON0: AUDIO_CLK" - None - - 
       P407 12 - - - - Disabled - - "ADC0: ADTRG0; AGT0: AGTIO0; CTSU0: TS03; GPT6: GTIOC6A; IIC0: SDA0; RTC0: RTCOUT; SCI4: CTSRTS4; SPI0: SSLA3; USB_FS0: USB_VBUS" - None - - 
       P408 11 - - - - Disabled - - "AGT2: AGTOB2; CTSU0: TS04; GPT_OPS0: GTOWLO; GPT6: GTIOC6B; ICU0: IRQ07; IIC0: SCL0; SCI3: RXD3; SCI3: SCL3; SCI4: CTS4; USB_FS0: USB_ID" - None - - 
@@ -179,6 +179,14 @@ FSP Configuration
     RS-485 Support: Disable
     IrDA Support: Disabled
     
+  Module "ADC (r_adc)"
+    Parameter Checking: Default (BSP)
+    
+  Module "I2C Master (r_sci_i2c)"
+    Parameter Checking: Default (BSP)
+    DTC on Transmission and Reception: Disabled
+    10-bit slave addressing: Disabled
+    
   HAL
     Instance "g_ioport I/O Port (r_ioport)"
       Name: g_ioport
@@ -216,4 +224,55 @@ FSP Configuration
       Interrupts: Transmit Data Empty Interrupt Priority: Priority 12
       Interrupts: Transmit End Interrupt Priority: Priority 12
       Interrupts: Error Interrupt Priority: Priority 12
+      
+    Instance "g_adc0 ADC (r_adc)"
+      General: Name: g_adc0
+      General: Unit: 0
+      General: Resolution: 12-Bit
+      General: Alignment: Right
+      General: Clear after read: On
+      General: Mode: Single Scan
+      General: Double-trigger: Disabled
+      Input: Channel Scan Mask (channel availability varies by MCU): Channel 11
+      Input: Group B Scan Mask (channel availability varies by MCU): 
+      Interrupts: Normal/Group A Trigger: Software
+      Interrupts: Group B Trigger: Disabled
+      Interrupts: Group Priority (Valid only in Group Scan Mode): Group A cannot interrupt Group B
+      Input: Add/Average Count: Disabled
+      Input: Reference Voltage control: VREFH0/VREFH
+      Input: Addition/Averaging Mask (channel availability varies by MCU and unit): 
+      Input: Sample and Hold: Sample and Hold Channels (Available only on selected MCUs): 
+      Input: Sample and Hold: Sample Hold States (Applies only to channels 0, 1, 2): 24
+      Input: Window Compare: Window Mode: Disabled
+      Input: Window Compare: Event Output: OR
+      Input: Window Compare: Window A: Enable: Disabled
+      Input: Window Compare: Window A: Channels to compare (channel availability varies by MCU and unit): 
+      Input: Window Compare: Window A: Channel comparison mode (channel availability varies by MCU and unit): 
+      Input: Window Compare: Window A: Lower Reference: 0
+      Input: Window Compare: Window A: Upper Reference: 0
+      Input: Window Compare: Window B: Enable: Disabled
+      Input: Window Compare: Window B: Channel to compare (channel availability varies by MCU and unit): Channel 0
+      Input: Window Compare: Window B: Comparison mode: Less Than or Outside Window
+      Input: Window Compare: Window B: Lower Reference: 0
+      Input: Window Compare: Window B: Upper Reference: 0
+      Interrupts: Callback: NULL
+      Interrupts: Scan End Interrupt Priority: Disabled
+      Interrupts: Scan End Group B Interrupt Priority: Disabled
+      Interrupts: Window Compare A Interrupt Priority: Disabled
+      Interrupts: Window Compare B Interrupt Priority: Disabled
+      Extra: ADC Ring Buffer: Disabled
+      
+    Instance "g_i2c_oled I2C Master (r_sci_i2c)"
+      Name: g_i2c_oled
+      Channel: 2
+      Slave Address : 0x3C
+      Address Mode: 7-Bit
+      Rate: Standard
+      Custom Rate (bps): 0
+      SDA Output Delay (nano seconds): 300
+      Noise filter setting: Use clock signal divided by 1 with noise filter
+      Bit Rate Modulation: Enable
+      Callback: oled_i2c_callback
+      Interrupt Priority Level: Priority 12
+      RX Interrupt Priority Level [Only used when DTC is enabled]: Disabled
       
