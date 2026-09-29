@@ -292,7 +292,7 @@
       <property id="module.driver.i2c.sda_delay" value="300"/>
       <property id="module.driver.i2c.snfr" value="module.driver.i2c.snfr.div_one"/>
       <property id="module.driver.i2c.bitrate_modulation" value="module.driver.i2c.bitrate_modulation.true"/>
-      <property id="module.driver.i2c.p_callback" value="oled_i2c_callback"/>
+      <property id="module.driver.i2c.p_callback" value="i2c_bus_callback"/>
       <property id="module.driver.i2c.ipl" value="board.icu.common.irq.priority12"/>
       <property id="module.driver.i2c.rx_ipl" value="_disabled"/>
     </module>

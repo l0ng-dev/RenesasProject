@@ -203,12 +203,42 @@ B976235BBD6A89306F6C41E424B7D0E1F8347436AE998923564892D94C00672D  E:\RenesasProj
 5F3091830B626E0230BB7BC58563451A5932B4CD5CC5FB75F58AB1B8D6338172  E:\RenesasProject\RA4M2_Blink\Target_1_build.log
 ```
 
+## 2026-09-29 MPU六轴、姿态解算、OLED与倾斜告警补录
+
+- 用户确认所用模块外部以5 V供电，I²C逻辑电平为3.3 V；SCL/SDA与OLED共用P301/P302，AD0默认低电平，对应7-bit从机地址`0x68`；模块板载SCL/SDA各4.7 kΩ上拉。以上属于用户提供的硬件事实，本轮没有新增RASC配置。
+- 用户提供的STM32F103成功工程将从机地址定义为`0x68`，同时允许`WHO_AM_I`返回`0x68`或`0x70`。因此该工程文本中的“寄存器地址0x70”实际是身份寄存器返回值，不是I²C从机地址。
+- 当前工程新增`src\modules\i2c_bus`共享访问层，由同一个SCI2 Simple I²C实例按事务切换OLED `0x3C`和IMU `0x68`；MPU路径实现身份读取、唤醒、采样率/滤波/量程配置回读、14字节六轴与温度连续读取。实机返回`WHO_AM_I=0x70`，固件按MPU6500兼容身份处理，不再把该值误判为总线故障。
+- 第一轮Watch截图显示`g_mpu6050_status=0x02`、`g_mpu6050_pwr_mgmt_1=0x01`、`g_mpu6050_who_am_i=0x70`、`g_mpu6050_last_fsp_error=0`、`g_mpu6050_read_count=0x55`、`g_mpu6050_error_count=0`，证明当前接线下初始化和连续读取通过。后续截图显示校准完成、读取计数`0x16E`、错误计数0；换算后的加速度合量约0.96 g、IMU温度约32.5 ℃，静止陀螺仪各轴约在1 °/s以内。
+- 驱动已完成±2 g、±2000 °/s物理量换算、200样本上电静止零偏校准，并以50 Hz执行Roll/Pitch互补滤波；没有磁力计，未实现可长期稳定的Yaw。用户明确确认姿态解算实机测试通过。
+- OLED保留DHT11/ADC原页面，并每3 s切换到Roll、Pitch、IMU温度和倾斜状态页面；姿态计算保持50 Hz，OLED姿态页以2 Hz刷新。用户确认双页面、角度/温度刷新及共享I²C实机运行通过。
+- 倾斜判定采用进入阈值30°并持续500 ms、恢复阈值20°以内并持续1 s；20°～30°为迟滞区，通信异常时状态为未知。用户确认正常、告警、迟滞保持和恢复流程通过。
+- 最新`Target_1`由ArmClang 6.24构建成功，结果`0 Error(s), 0 Warning(s)`；Program Size为Code=18156、RO-data=2672、RW-data=8、ZI-data=3316，生成AXF和HEX。用户确认本轮功能实机通过；未执行长期、压力、弱信号、功耗或巡线机器人整机验收。
+
+本轮当前产物 SHA-256：
+
+```text
+BB713039865A9AA6EB12A1278E35907C2240B5610461C68024278BD8A8437848  E:\RenesasProject\RA4M2_Blink\src\app\app_main.c
+3E91942897E51180FE29B8370EB150783CE9ABF2AEDD215FD797B42C972CA465  E:\RenesasProject\RA4M2_Blink\src\config\app_config.h
+27B24E21CF35774D3995FF2892E3CC3F29177C552822760C0C43DE0120C7A789  E:\RenesasProject\RA4M2_Blink\src\modules\mpu6050\mpu6050.c
+61961E63D697BA6B2F79272EE0C6EECE2D680EB7FC5E9FF95C9B38DF8E5BE471  E:\RenesasProject\RA4M2_Blink\src\modules\mpu6050\mpu6050.h
+6544D7EA4E54E4D65F833E63D17E47E128AD1F9D8F6F2C71916950B66FF6852E  E:\RenesasProject\RA4M2_Blink\src\modules\i2c_bus\i2c_bus.c
+89B0349728F58D7DAE65B1E9ECEF279093FB605B66153CA01C2250D71D5E464C  E:\RenesasProject\RA4M2_Blink\src\modules\i2c_bus\i2c_bus.h
+EB0FBFF333CDBCD3354365E5A31BCE7E0F365146667C503E5CA5C68C2E057D0D  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.axf
+CB83DCED5AE4D8368EB3505CA33855833808F0D5384C78EFFF34B42F099F74F7  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.hex
+4AD8FAB02D30B6EE101658C250961DB99999505AE3D8EEDAE9A1A77D5D6C5310  E:\RenesasProject\RA4M2_Blink\mpu6050_build.log
+```
+
 ## 下一步边界
 
-RA4M2 ↔ DA16200 的 UART、上电等待、自动联网状态识别、P102/DPM Host 握手和一次热点断开恢复已取得用户实机证据；DHT11读取、OLED显示及10分钟稳定性也已由用户确认通过。当前固件不包含巴法云、MQTT或历史数据重放。下一步先烧录并回归验证2026-09-29精简产物，再正式确认MPU6050模块、供电、地址脚、上拉和接线，并据此建立与OLED共用P301/P302的I²C访问层。弱信号、反复掉线、功耗和更长时间稳定性仍待单独验收；用户明确不执行100次循环测试。
+RA4M2 ↔ DA16200基础连接、DHT11、ADC/OLED以及IMU共享I²C、六轴采集、Roll/Pitch、双页面显示和倾斜告警均已有用户实机证据。当前固件不包含巴法云、阿里云Alink、MQTT、历史数据重放或实时传感器消息发送。
+
+后续路线已确定为：先建立与云平台无关的`app_telemetry_t`统一快照，集中保存DHT11温湿度、ADC原始值/百分比、IMU温度、Roll/Pitch、倾斜状态、序号/运行时间及各数据源有效性；温度、湿度、百分比和角度在本地使用扩大10倍的定点整数。先通过Keil Watch仅观察`g_app_telemetry`，核对其与当前OLED及各驱动结果一致。完成本地验证后，再依次定义阿里云物模型、实现“本地定点整数→阿里云直观数值”的Alink JSON映射，最后恢复DA16200 MQTT发送。`ProductKey`、`DeviceName`、Topic和认证信息不得进入统一快照，凭据不得写入交接报告或受版本控制的源码。
+
+统一快照和字段映射属于用户代码修改，不涉及RASC；网络发送继续后置。弱信号、反复掉线、功耗和更长时间稳定性仍待单独验收；用户明确不执行100次循环测试。
 
 ## 证据文件
 
 - 构建命令日志：`E:\RenesasProject\RA4M2_Blink\Target_1_build.log`
+- 本轮MPU/姿态构建日志：`E:\RenesasProject\RA4M2_Blink\mpu6050_build.log`
 - Keil 构建日志：`E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.build_log.htm`
 - 工程报告：`E:\RenesasProject\RA4M2_DA16200巡线机器人替代方案交接报告_2026-09-24.md`

@@ -1,13 +1,13 @@
 #include "oled.h"
 #include "oled_font.h"
-#include <stdbool.h>
+#include "i2c_bus.h"
 #include <stddef.h>
 
+#define OLED_I2C_ADDRESS            (0x3CU)
 #define OLED_WIDTH                  (128U)
 #define OLED_PAGE_COUNT             (8U)
 #define OLED_CONTROL_COMMAND        (0x00U)
 #define OLED_CONTROL_DATA           (0x40U)
-#define OLED_TRANSFER_TIMEOUT_MS    (100U)
 #define OLED_MAX_PAYLOAD_SIZE       (OLED_WIDTH)
 
 volatile uint8_t  g_oled_status = OLED_STATUS_NOT_INITIALIZED;
@@ -15,16 +15,6 @@ volatile uint32_t g_oled_last_fsp_error = (uint32_t) FSP_SUCCESS;
 volatile uint32_t g_oled_transfer_count;
 volatile uint32_t g_oled_abort_count;
 volatile uint32_t g_oled_timeout_count;
-
-static volatile i2c_master_event_t g_oled_i2c_event;
-
-void oled_i2c_callback (i2c_master_callback_args_t * p_args)
-{
-    if (NULL != p_args)
-    {
-        g_oled_i2c_event = p_args->event;
-    }
-}
 
 static fsp_err_t oled_write (uint8_t control, uint8_t const * p_data, uint32_t length)
 {
@@ -44,41 +34,31 @@ static fsp_err_t oled_write (uint8_t control, uint8_t const * p_data, uint32_t l
         tx_buffer[index + 1U] = p_data[index];
     }
 
-    g_oled_i2c_event = (i2c_master_event_t) 0;
-    err = g_i2c_oled.p_api->write(g_i2c_oled.p_ctrl, tx_buffer, length + 1U, false);
-    if (FSP_SUCCESS != err)
+    err = I2C_Bus_Write(OLED_I2C_ADDRESS, tx_buffer, length + 1U);
+    if (FSP_SUCCESS == err)
+    {
+        g_oled_transfer_count++;
+        g_oled_status = OLED_STATUS_READY;
+        g_oled_last_fsp_error = (uint32_t) FSP_SUCCESS;
+        return FSP_SUCCESS;
+    }
+
+    if (FSP_ERR_ABORTED == err)
+    {
+        g_oled_abort_count++;
+        g_oled_status = OLED_STATUS_TRANSFER_ABORTED;
+    }
+    else if (FSP_ERR_TIMEOUT == err)
+    {
+        g_oled_timeout_count++;
+        g_oled_status = OLED_STATUS_TRANSFER_TIMEOUT;
+    }
+    else
     {
         g_oled_status = OLED_STATUS_TRANSFER_FAILED;
-        g_oled_last_fsp_error = (uint32_t) err;
-        return err;
     }
-
-    for (uint32_t elapsed = 0U; elapsed < OLED_TRANSFER_TIMEOUT_MS; elapsed++)
-    {
-        if (I2C_MASTER_EVENT_TX_COMPLETE == g_oled_i2c_event)
-        {
-            g_oled_transfer_count++;
-            g_oled_status = OLED_STATUS_READY;
-            g_oled_last_fsp_error = (uint32_t) FSP_SUCCESS;
-            return FSP_SUCCESS;
-        }
-
-        if (I2C_MASTER_EVENT_ABORTED == g_oled_i2c_event)
-        {
-            g_oled_abort_count++;
-            g_oled_status = OLED_STATUS_TRANSFER_ABORTED;
-            g_oled_last_fsp_error = (uint32_t) FSP_ERR_ABORTED;
-            return FSP_ERR_ABORTED;
-        }
-
-        R_BSP_SoftwareDelay(1U, BSP_DELAY_UNITS_MILLISECONDS);
-    }
-
-    (void) g_i2c_oled.p_api->abort(g_i2c_oled.p_ctrl);
-    g_oled_timeout_count++;
-    g_oled_status = OLED_STATUS_TRANSFER_TIMEOUT;
-    g_oled_last_fsp_error = (uint32_t) FSP_ERR_TIMEOUT;
-    return FSP_ERR_TIMEOUT;
+    g_oled_last_fsp_error = (uint32_t) err;
+    return err;
 }
 
 fsp_err_t OLED_WriteCommand (uint8_t command)
@@ -155,14 +135,11 @@ fsp_err_t OLED_Init (void)
     g_oled_transfer_count = 0U;
     g_oled_abort_count = 0U;
     g_oled_timeout_count = 0U;
-    g_oled_i2c_event = (i2c_master_event_t) 0;
-
-    err = g_i2c_oled.p_api->open(g_i2c_oled.p_ctrl, g_i2c_oled.p_cfg);
-    if (FSP_SUCCESS != err)
+    if (!I2C_Bus_IsReady())
     {
         g_oled_status = OLED_STATUS_OPEN_FAILED;
-        g_oled_last_fsp_error = (uint32_t) err;
-        return err;
+        g_oled_last_fsp_error = (uint32_t) FSP_ERR_NOT_OPEN;
+        return FSP_ERR_NOT_OPEN;
     }
 
     R_BSP_SoftwareDelay(100U, BSP_DELAY_UNITS_MILLISECONDS);

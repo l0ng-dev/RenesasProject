@@ -14,8 +14,8 @@ FSP_HEADER
 extern const i2c_master_cfg_t g_i2c_oled_cfg;
 /* I2C on SCI Instance. */
 extern const i2c_master_instance_t g_i2c_oled;
-#ifndef oled_i2c_callback
-void oled_i2c_callback(i2c_master_callback_args_t * p_args);
+#ifndef i2c_bus_callback
+void i2c_bus_callback(i2c_master_callback_args_t * p_args);
 #endif
 
 extern const sci_i2c_extended_cfg_t g_i2c_oled_cfg_extend;

@@ -21,6 +21,8 @@
         <file category="header" name="src/modules/da16200/da16200.h" path=""/>
         <file category="source" name="src/modules/dht11/dht11.c"/>
         <file category="header" name="src/modules/dht11/dht11.h" path=""/>
+        <file category="source" name="src/modules/i2c_bus/i2c_bus.c"/>
+        <file category="header" name="src/modules/i2c_bus/i2c_bus.h" path=""/>
         <file category="source" name="src/modules/mpu6050/mpu6050.c"/>
         <file category="header" name="src/modules/mpu6050/mpu6050.h" path=""/>
         <file category="source" name="src/modules/oled/oled.c"/>

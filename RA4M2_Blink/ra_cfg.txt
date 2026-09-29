@@ -272,7 +272,7 @@ FSP Configuration
       SDA Output Delay (nano seconds): 300
       Noise filter setting: Use clock signal divided by 1 with noise filter
       Bit Rate Modulation: Enable
-      Callback: oled_i2c_callback
+      Callback: i2c_bus_callback
       Interrupt Priority Level: Priority 12
       RX Interrupt Priority Level [Only used when DTC is enabled]: Disabled
       

@@ -26,7 +26,7 @@ const i2c_master_cfg_t g_i2c_oled_cfg =
     .p_transfer_rx       = &RA_NOT_DEFINED,
 #endif
 #undef RA_NOT_DEFINED
-    .p_callback          = oled_i2c_callback,
+    .p_callback          = i2c_bus_callback,
     .p_context           = NULL,
 #if defined(VECTOR_NUMBER_SCI2_RXI) && SCI_I2C_CFG_DTC_ENABLE
     .rxi_irq             = VECTOR_NUMBER_SCI2_RXI,

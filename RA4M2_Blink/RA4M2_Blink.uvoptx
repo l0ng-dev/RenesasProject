@@ -158,132 +158,57 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_wifi_ready</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/mpu6050/mpu6050.c\g_mpu6050_status</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_wifi_status</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/mpu6050/mpu6050.c\g_mpu6050_pwr_mgmt_1</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_uart_error</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/mpu6050/mpu6050.c\g_mpu6050_who_am_i</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_wakeup_stage</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/mpu6050/mpu6050.c\g_mpu6050_last_fsp_error</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_dpm_handshake_stage</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/mpu6050/mpu6050.c\g_mpu6050_read_count</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_at_sync_result</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/mpu6050/mpu6050.c\g_mpu6050_error_count</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_wifi_status_result</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/mpu6050/mpu6050.c\g_mpu6050_accel_x</ItemText>
         </Ww>
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_scan_result</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/mpu6050/mpu6050.c\g_mpu6050_calibrated</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_scan_ap_count</ItemText>
+          <ItemText>\\RA4M2_Blink\src/modules/mpu6050/mpu6050.c\g_mpu6050_data</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_target_ap_found</ItemText>
+          <ItemText>g_mpu6050_roll_deg</ItemText>
         </Ww>
         <Ww>
           <count>10</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_join_command_result</ItemText>
-        </Ww>
-        <Ww>
-          <count>11</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_join_result</ItemText>
-        </Ww>
-        <Ww>
-          <count>12</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_at_result</ItemText>
-        </Ww>
-        <Ww>
-          <count>13</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_last_uart_event</ItemText>
-        </Ww>
-        <Ww>
-          <count>14</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_last_rx_line</ItemText>
-        </Ww>
-        <Ww>
-          <count>15</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/da16200/da16200.c\g_rx_received</ItemText>
-        </Ww>
-        <Ww>
-          <count>16</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_status</ItemText>
-        </Ww>
-        <Ww>
-          <count>17</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_last_fsp_error</ItemText>
-        </Ww>
-        <Ww>
-          <count>18</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_read_count</ItemText>
-        </Ww>
-        <Ww>
-          <count>19</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_timeout_count</ItemText>
-        </Ww>
-        <Ww>
-          <count>20</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_checksum_error_count</ItemText>
-        </Ww>
-        <Ww>
-          <count>21</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_raw_data</ItemText>
-        </Ww>
-        <Ww>
-          <count>22</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_stage</ItemText>
-        </Ww>
-        <Ww>
-          <count>23</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_last_level</ItemText>
-        </Ww>
-        <Ww>
-          <count>24</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_idle_level</ItemText>
-        </Ww>
-        <Ww>
-          <count>25</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>\\RA4M2_Blink\src/modules/dht11/dht11.c\g_dht11_release_level</ItemText>
+          <ItemText>g_mpu6050_pitch_deg</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -503,6 +428,30 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\i2c_bus\i2c_bus.c</PathWithFileName>
+      <FilenameWithoutPath>i2c_bus.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>14</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\modules\i2c_bus\i2c_bus.h</PathWithFileName>
+      <FilenameWithoutPath>i2c_bus.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>15</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
       <PathWithFileName>.\src\modules\oled\oled.c</PathWithFileName>
       <FilenameWithoutPath>oled.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -510,7 +459,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>14</FileNumber>
+      <FileNumber>16</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -522,7 +471,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>15</FileNumber>
+      <FileNumber>17</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -534,7 +483,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>16</FileNumber>
+      <FileNumber>18</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -546,7 +495,7 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
-      <FileNumber>17</FileNumber>
+      <FileNumber>19</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
