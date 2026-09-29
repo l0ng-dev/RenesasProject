@@ -405,6 +405,16 @@
               <FilePath>.\src\app\app_main.h</FilePath>
             </File>
             <File>
+              <FileName>bemfa_payload.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\app\bemfa_payload.c</FilePath>
+            </File>
+            <File>
+              <FileName>bemfa_payload.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\app\bemfa_payload.h</FilePath>
+            </File>
+            <File>
               <FileName>app_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\src\config\app_config.h</FilePath>

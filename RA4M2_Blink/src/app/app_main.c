@@ -1,6 +1,7 @@
 #include "app_main.h"
 
 #include "app_config.h"
+#include "bemfa_payload.h"
 #include "da16200.h"
 #include "dht11.h"
 #include "i2c_bus.h"
@@ -13,6 +14,12 @@
 #include <stdio.h>
 
 volatile uint8_t g_attitude_state = APP_ATTITUDE_STATE_UNKNOWN;
+volatile app_telemetry_t g_app_telemetry;
+volatile uint8_t  g_bemfa_mqtt_publish_result;
+volatile uint32_t g_bemfa_mqtt_publish_attempt_count;
+volatile uint32_t g_bemfa_mqtt_publish_success_count;
+volatile uint32_t g_bemfa_mqtt_publish_error_count;
+volatile uint32_t g_bemfa_mqtt_last_published_sequence;
 
 static bool     g_pot_display_cache_valid;
 static uint16_t g_oled_last_display_raw;
@@ -23,9 +30,14 @@ static uint32_t g_dht11_refresh_elapsed_ms;
 static uint32_t g_oled_page_elapsed_ms;
 static uint32_t g_oled_attitude_refresh_elapsed_ms;
 static uint32_t g_wifi_check_elapsed_ms;
+static uint32_t g_telemetry_refresh_elapsed_ms;
+static uint32_t g_bemfa_publish_elapsed_ms;
+static uint32_t g_app_uptime_ms;
 static uint32_t g_tilt_alarm_elapsed_ms;
 static uint32_t g_tilt_recovery_elapsed_ms;
+static uint32_t g_bemfa_pending_sequence;
 static bool     g_oled_attitude_page;
+static bool     g_bemfa_publish_pending;
 
 static float app_abs_float (float value)
 {
@@ -90,6 +102,68 @@ static void app_update_attitude_monitor (void)
 static int32_t app_float_to_tenths (float value)
 {
     return (int32_t) ((value >= 0.0F) ? ((value * 10.0F) + 0.5F) : ((value * 10.0F) - 0.5F));
+}
+
+static void app_telemetry_init (void)
+{
+    g_app_uptime_ms = 0U;
+    g_telemetry_refresh_elapsed_ms = 0U;
+    g_bemfa_publish_elapsed_ms = 0U;
+    g_bemfa_mqtt_publish_result = DA16200_MQTT_PUBLISH_NOT_ATTEMPTED;
+    g_bemfa_mqtt_publish_attempt_count = 0U;
+    g_bemfa_mqtt_publish_success_count = 0U;
+    g_bemfa_mqtt_publish_error_count = 0U;
+    g_bemfa_mqtt_last_published_sequence = 0U;
+    g_bemfa_pending_sequence = 0U;
+    g_bemfa_publish_pending = false;
+
+    g_app_telemetry.sequence = 0U;
+    g_app_telemetry.uptime_ms = 0U;
+    g_app_telemetry.air_temperature_x10 = 0;
+    g_app_telemetry.air_humidity_x10 = 0U;
+    g_app_telemetry.adc_raw = 0U;
+    g_app_telemetry.adc_percent_x10 = 0U;
+    g_app_telemetry.imu_temperature_x10 = 0;
+    g_app_telemetry.roll_angle_x10 = 0;
+    g_app_telemetry.pitch_angle_x10 = 0;
+    g_app_telemetry.tilt_state = APP_ATTITUDE_STATE_UNKNOWN;
+    g_app_telemetry.dht11_valid = 0U;
+    g_app_telemetry.adc_valid = 0U;
+    g_app_telemetry.imu_valid = 0U;
+}
+
+static void app_update_telemetry (void)
+{
+    bool const dht11_valid = (DHT11_STATUS_READ_OK == g_dht11_status);
+    bool const adc_valid = ((1U == g_pot_adc_result) &&
+                            (g_pot_sample_count > 0U) &&
+                            ((uint32_t) FSP_SUCCESS == g_pot_last_fsp_error));
+    bool const imu_valid = ((MPU6050_STATUS_READ_OK == g_mpu6050_status) &&
+                            (0U != g_mpu6050_calibrated) &&
+                            (g_mpu6050_read_count > 0U));
+
+    g_app_telemetry.uptime_ms = g_app_uptime_ms;
+    g_app_telemetry.air_temperature_x10 =
+        (int16_t) (((uint16_t) g_dht11_temperature_integer * 10U) +
+                   (uint16_t) g_dht11_temperature_decimal);
+    g_app_telemetry.air_humidity_x10 =
+        (uint16_t) (((uint16_t) g_dht11_humidity_integer * 10U) +
+                    (uint16_t) g_dht11_humidity_decimal);
+    g_app_telemetry.adc_raw = g_pot_raw;
+    g_app_telemetry.adc_percent_x10 = g_pot_percent_x10;
+    g_app_telemetry.imu_temperature_x10 =
+        (int16_t) app_float_to_tenths(g_mpu6050_data.temperature_c);
+    g_app_telemetry.roll_angle_x10 =
+        (int16_t) app_float_to_tenths(g_mpu6050_roll_deg);
+    g_app_telemetry.pitch_angle_x10 =
+        (int16_t) app_float_to_tenths(g_mpu6050_pitch_deg);
+    g_app_telemetry.tilt_state = imu_valid ?
+                                 g_attitude_state : APP_ATTITUDE_STATE_UNKNOWN;
+    g_app_telemetry.dht11_valid = dht11_valid ? 1U : 0U;
+    g_app_telemetry.adc_valid = adc_valid ? 1U : 0U;
+    g_app_telemetry.imu_valid = imu_valid ? 1U : 0U;
+    g_app_telemetry.sequence++;
+    BemfaPayload_Update(&g_app_telemetry);
 }
 
 static void app_format_signed_tenths (char * p_line,
@@ -291,13 +365,35 @@ static void app_service_delay (uint32_t delay_ms)
 {
     while (delay_ms-- > 0U)
     {
+        uint8_t mqtt_result;
+
         DA16200_ServiceDelay(1U);
+        if (g_bemfa_publish_pending && DA16200_MQTT_TakeResult(&mqtt_result))
+        {
+            g_bemfa_mqtt_publish_result = mqtt_result;
+            g_bemfa_publish_pending = false;
+            if (DA16200_MQTT_PUBLISH_OK == mqtt_result)
+            {
+                g_bemfa_mqtt_publish_success_count++;
+                g_bemfa_mqtt_last_published_sequence = g_bemfa_pending_sequence;
+            }
+            else
+            {
+                g_bemfa_mqtt_publish_error_count++;
+            }
+        }
         g_sensor_refresh_elapsed_ms++;
         g_mpu6050_refresh_elapsed_ms++;
         g_dht11_refresh_elapsed_ms++;
         g_oled_page_elapsed_ms++;
         g_oled_attitude_refresh_elapsed_ms++;
         g_wifi_check_elapsed_ms++;
+        g_telemetry_refresh_elapsed_ms++;
+        if (g_bemfa_publish_elapsed_ms < APP_BEMFA_PUBLISH_INTERVAL_MS)
+        {
+            g_bemfa_publish_elapsed_ms++;
+        }
+        g_app_uptime_ms++;
         if (g_mpu6050_refresh_elapsed_ms >= APP_MPU6050_REFRESH_INTERVAL_MS)
         {
             g_mpu6050_refresh_elapsed_ms = 0U;
@@ -351,6 +447,39 @@ static void app_service_delay (uint32_t delay_ms)
             g_oled_attitude_page = !g_oled_attitude_page;
             app_display_current_page();
         }
+        if (g_telemetry_refresh_elapsed_ms >= APP_TELEMETRY_REFRESH_INTERVAL_MS)
+        {
+            g_telemetry_refresh_elapsed_ms = 0U;
+            app_update_telemetry();
+        }
+    }
+}
+
+static void app_publish_bemfa_if_due (void)
+{
+    uint32_t payload_sequence;
+
+    if ((g_bemfa_publish_elapsed_ms < APP_BEMFA_PUBLISH_INTERVAL_MS) ||
+        (BEMFA_PAYLOAD_RESULT_OK != g_bemfa_payload_result) ||
+        g_bemfa_publish_pending || DA16200_MQTT_IsBusy() ||
+        DA16200_ConnectIsBusy())
+    {
+        return;
+    }
+
+    payload_sequence = g_bemfa_payload_sequence;
+    if (payload_sequence == g_bemfa_mqtt_last_published_sequence)
+    {
+        return;
+    }
+
+    if (DA16200_MQTT_RequestPublish(g_bemfa_payload))
+    {
+        g_bemfa_publish_elapsed_ms = 0U;
+        g_bemfa_mqtt_publish_attempt_count++;
+        g_bemfa_mqtt_publish_result = DA16200_MQTT_PUBLISH_NOT_ATTEMPTED;
+        g_bemfa_pending_sequence = payload_sequence;
+        g_bemfa_publish_pending = true;
     }
 }
 
@@ -367,6 +496,7 @@ static void app_oled_init (void)
     g_oled_page_elapsed_ms = 0U;
     g_oled_attitude_refresh_elapsed_ms = 0U;
     g_wifi_check_elapsed_ms = 0U;
+    g_telemetry_refresh_elapsed_ms = 0U;
     g_tilt_alarm_elapsed_ms = 0U;
     g_tilt_recovery_elapsed_ms = 0U;
     g_oled_attitude_page = false;
@@ -400,6 +530,8 @@ void App_Main (void)
     bool communication_ready;
     fsp_err_t mpu6050_err;
 
+    app_telemetry_init();
+    BemfaPayload_Init();
     Potentiometer_Init();
     Potentiometer_Sample();
     (void) DHT11_Init();
@@ -423,8 +555,10 @@ void App_Main (void)
         app_reset_attitude_monitor();
     }
 
-    communication_ready = DA16200_Connect();
+    communication_ready = false;
+    (void) DA16200_RequestConnect();
     (void) DHT11_Read();
+    app_update_telemetry();
     app_display_dht11();
 
     while (1)
@@ -443,17 +577,24 @@ void App_Main (void)
                                  BSP_IO_LEVEL_LOW);
         app_service_delay(blink_interval_ms);
 
+        communication_ready = DA16200_IsReady();
         uint32_t const wifi_check_interval_ms = communication_ready ?
                                                  DA16200_STATUS_CHECK_INTERVAL_MS :
                                                  DA16200_RETRY_INTERVAL_MS;
 
-        if (g_wifi_check_elapsed_ms >= wifi_check_interval_ms)
+        if ((g_wifi_check_elapsed_ms >= wifi_check_interval_ms) &&
+            !DA16200_MQTT_IsBusy() && !DA16200_ConnectIsBusy())
         {
-            g_wifi_check_elapsed_ms = 0U;
-            communication_ready = DA16200_Connect();
+            if (DA16200_RequestConnect())
+            {
+                g_wifi_check_elapsed_ms = 0U;
+            }
         }
-        else
+
+        communication_ready = DA16200_IsReady();
+        if (communication_ready)
         {
+            app_publish_bemfa_if_due();
             communication_ready = DA16200_IsReady();
         }
     }

@@ -13,6 +13,8 @@
         <file category="include" name="src/"/>
         <file category="source" name="src/app/app_main.c"/>
         <file category="header" name="src/app/app_main.h" path=""/>
+        <file category="source" name="src/app/bemfa_payload.c"/>
+        <file category="header" name="src/app/bemfa_payload.h" path=""/>
         <file category="header" name="src/config/app_config.h" path=""/>
         <file category="header" name="src/config/wifi_credentials.h" path=""/>
         <file category="source" name="src/hal_entry.c"/>

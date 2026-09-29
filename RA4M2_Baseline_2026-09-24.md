@@ -228,17 +228,40 @@ CB83DCED5AE4D8368EB3505CA33855833808F0D5384C78EFFF34B42F099F74F7  E:\RenesasProj
 4AD8FAB02D30B6EE101658C250961DB99999505AE3D8EEDAE9A1A77D5D6C5310  E:\RenesasProject\RA4M2_Blink\mpu6050_build.log
 ```
 
+## 2026-09-29 巴法云实时发布、非阻塞通信与断网恢复补录
+
+- 巴法云Broker、认证信息和主题现由本地受排除配置向DA16200显式下发，不再依赖模块内无法复现的既存MQTT配置；报告、日志和受版本控制源码均不记录真实认证值或主题值。阿里云物模型和Alink路线已经终止。
+- 当前固件按5秒周期从`app_telemetry_t`生成有界JSON，并依次完成DA16200唤醒、DPM Host握手、Wi-Fi状态确认、MQTT配置/连接、发布命令和异步发布回执。用户已确认巴法云页面连续收到当前实时JSON，模块回执与云端接收两个证据层级均已取得。
+- MQTT AT回执、MQTT连接等待和发布确认已经改为1 ms协作式状态机；随后启动连接、热点扫描、重新入网和DPM恢复也改为非阻塞状态机。UART继续使用中断接收环形缓冲，连接状态机与MQTT状态机互斥使用AT通道。
+- 最终`Target_1`使用ArmClang构建成功，目标器件`R7FA4M2AD`，结果`0 Error(s), 0 Warning(s)`；Program Size为Code=24980、RO-data=3132、RW-data=8、ZI-data=4492，生成AXF和HEX。构建日志为`wifi_reconnect_nonblocking_build.log`。
+- 用户主动断开手机热点进行故障注入后，Watch显示连接尝试28次、成功3次、失败25次；这25次失败均属于热点关闭期间的预期重连尝试，不作为随机通信缺陷。最近一次离线时长为53307 ms，热点恢复后`g_da16200_connect_result=1`、当前离线时长归零，巴法云发布继续进行。
+- 同一组Watch证据显示MQTT发布成功13次、失败1次，最后发布序号634；`g_mpu6050_read_count`在观察刷新间由6609增加到6611，证明重连/发布调度未冻结50 Hz IMU采集。用户另行明确确认至少30分钟连续稳定性测试通过。
+- 本项可记录为：已实现、已构建、已由用户烧录并完成当前台架的巴法云端到端、单次主动断热点恢复、通信非阻塞性和至少30分钟连续运行验证。该结论不扩展为弱信号、多轮反复掉线、100次循环、离线缓存、峰值功耗、机器人整机或输电线路现场验收。
+
+本轮当前产物 SHA-256：
+
+```text
+8476C885AFD7517A1D6254146C4B939CA2C7E6B2922F81C834C6F0EF96835611  E:\RenesasProject\RA4M2_Blink\src\app\app_main.c
+1C03F4D565F09CAA2BB5DEC3B09F8ABD85384CA6245908E9BCB9873E32184EA5  E:\RenesasProject\RA4M2_Blink\src\modules\da16200\da16200.c
+E89126886C60DF00E62D62BEE4C23D55F2461CAAC9F3AB086BE23209845C5DD3  E:\RenesasProject\RA4M2_Blink\src\modules\da16200\da16200.h
+B21B0FC8E1B87852F1EE75D6AFC1624AE10C69369D3ECE14B5851319C2AD8A30  E:\RenesasProject\RA4M2_Blink\src\app\bemfa_payload.c
+23DC165C07E4BAB963C996CCBA0651BCB4CF6E78E1DD8CD43B044A9A2513638D  E:\RenesasProject\RA4M2_Blink\src\app\bemfa_payload.h
+E3F4B9815C2B1EECA16C6532A88B81EFD0D1A0A408B89BA2DB5D2C4E18ACF4A1  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.axf
+FA62BDAF1F32C5A205FBCA0B2833BFCE7CFD439BC953639188E6342EC5BD88EB  E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.hex
+BD76DEC44CF0E4E73BE0815F9D80F98BB87A8D6FCFDB86B8E2D535954F0C93C7  E:\RenesasProject\RA4M2_Blink\wifi_reconnect_nonblocking_build.log
+```
+
 ## 下一步边界
 
-RA4M2 ↔ DA16200基础连接、DHT11、ADC/OLED以及IMU共享I²C、六轴采集、Roll/Pitch、双页面显示和倾斜告警均已有用户实机证据。当前固件不包含巴法云、阿里云Alink、MQTT、历史数据重放或实时传感器消息发送。
+RA4M2 ↔ DA16200基础连接、DHT11、ADC/OLED、IMU共享I²C、六轴采集、Roll/Pitch、双页面显示、倾斜告警、统一快照、巴法云有界JSON、当前实时快照云端接收、非阻塞MQTT发布和单次主动断热点恢复均已有用户实机证据；至少30分钟连续稳定性测试已由用户明确确认通过。
 
-后续路线已确定为：先建立与云平台无关的`app_telemetry_t`统一快照，集中保存DHT11温湿度、ADC原始值/百分比、IMU温度、Roll/Pitch、倾斜状态、序号/运行时间及各数据源有效性；温度、湿度、百分比和角度在本地使用扩大10倍的定点整数。先通过Keil Watch仅观察`g_app_telemetry`，核对其与当前OLED及各驱动结果一致。完成本地验证后，再依次定义阿里云物模型、实现“本地定点整数→阿里云直观数值”的Alink JSON映射，最后恢复DA16200 MQTT发送。`ProductKey`、`DeviceName`、Topic和认证信息不得进入统一快照，凭据不得写入交接报告或受版本控制的源码。
-
-统一快照和字段映射属于用户代码修改，不涉及RASC；网络发送继续后置。弱信号、反复掉线、功耗和更长时间稳定性仍待单独验收；用户明确不执行100次循环测试。
+下一阶段可实现倾斜告警/恢复状态变化时的即时补充发布，并单独验证弱信号、多轮反复掉线、离线数据策略和功耗。巴法云账户标识、用户私钥、MQTT主题和其他认证信息继续不得进入统一快照、交接报告、日志或受版本控制的源码；用户明确不执行100次自动循环测试。
 
 ## 证据文件
 
 - 构建命令日志：`E:\RenesasProject\RA4M2_Blink\Target_1_build.log`
 - 本轮MPU/姿态构建日志：`E:\RenesasProject\RA4M2_Blink\mpu6050_build.log`
+- MQTT非阻塞构建日志：`E:\RenesasProject\RA4M2_Blink\mqtt_nonblocking_build.log`
+- Wi-Fi非阻塞重连最终构建日志：`E:\RenesasProject\RA4M2_Blink\wifi_reconnect_nonblocking_build.log`
 - Keil 构建日志：`E:\RenesasProject\RA4M2_Blink\Objects\RA4M2_Blink.build_log.htm`
 - 工程报告：`E:\RenesasProject\RA4M2_DA16200巡线机器人替代方案交接报告_2026-09-24.md`
