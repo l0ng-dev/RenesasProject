@@ -11,3 +11,8 @@
 
 # Local Wi-Fi credentials (contains sensitive values)
 /RA4M2_Blink/src/config/wifi_credentials.h
+
+# Local-only project notes
+/AGENTS.md
+/RA4M2_Baseline_2026-09-24.md
+/RA4M2_DA16200巡线机器人替代方案交接报告_2026-09-24.md
