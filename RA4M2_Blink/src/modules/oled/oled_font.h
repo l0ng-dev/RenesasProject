@@ -1,6 +1,7 @@
 #ifndef __OLED_FONT_H
 #define __OLED_FONT_H
 #include <stdint.h>
+/* 字库来源：江协科技（https://jiangxiekeji.com/）。 */
 /*OLED字模库，宽8像素，高16像素*/
 static const uint8_t OLED_F8x16[]=
 {
